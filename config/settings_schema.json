@@ -66,7 +66,7 @@
       { "type": "text", "id": "spin_code2", "label": "Segment 2 code", "default": "BEAST10" },
       { "type": "text", "id": "spin_l3", "label": "Segment 3 label", "default": "TRY AGAIN" },
       { "type": "color", "id": "spin_c3", "label": "Segment 3 color", "default": "#2a2018" },
-      { "type": "text", "id": "spin_code3", "label": "Segment 3 code", "default": "" },
+      { "type": "text", "id": "spin_code3", "label": "Segment 3 code" },
       { "type": "text", "id": "spin_l4", "label": "Segment 4 label", "default": "15% OFF" },
       { "type": "color", "id": "spin_c4", "label": "Segment 4 color", "default": "#d9a23f" },
       { "type": "text", "id": "spin_code4", "label": "Segment 4 code", "default": "BEAST15" },
