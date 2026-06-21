@@ -67,14 +67,39 @@
         "row_height": 128,
         "logo_height": 80,
         "speed": 66,
-        "top_gap": 0,
+        "top_gap": 36,
         "wave_top": false,
         "wave_bottom": true
+      }
+    },
+    "glass_mosaic_banner_aeR8DE": {
+      "type": "glass-mosaic-banner",
+      "name": "Glass Mosaic Banner (3D WebGL)",
+      "settings": {
+        "use_unified_image": false,
+        "unified_url": "",
+        "unified_url_mobile": "",
+        "glass_thickness": 0.1,
+        "glass_roughness": 0,
+        "glass_ior": 1.1,
+        "glass_dispersion": 0.1,
+        "glass_iridescence": 0.2,
+        "url_1": "",
+        "url_1_mobile": "",
+        "url_2": "",
+        "url_2_mobile": "",
+        "url_3": "",
+        "url_3_mobile": "",
+        "url_4": "",
+        "url_4_mobile": "",
+        "url_5": "",
+        "url_5_mobile": ""
       }
     }
   },
   "order": [
     "main",
-    "marquee_feQJzN"
+    "marquee_feQJzN",
+    "glass_mosaic_banner_aeR8DE"
   ]
 }
