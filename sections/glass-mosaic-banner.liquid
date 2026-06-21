@@ -236,24 +236,25 @@
     }
 
     // -----------------------------------------------------------------------------------
-    // SHATTERED CRYSTAL LAYOUT — irregular angular shards (no rectangles)
+    // SHATTERED CRYSTAL LAYOUT — balanced irregular shards, gap-free tessellation
+    // Two interior crack points (I1,I2) so shards meet along edges, not a single point.
     // Desktop bounds: x[-14..14], y[-6..6]
     // -----------------------------------------------------------------------------------
     const rawShards = [
-      [[-14, 6], [-3, 6], [1, 1], [-6, -1], [-14, -2]],            // top-left pentagon
-      [[-3, 6], [14, 6], [14, 1], [6, 2], [1, 1]],                 // top-right wedge
-      [[6, 2], [14, 1], [14, -6], [5, -6], [2, -2]],               // right shard
-      [[1, 1], [6, 2], [2, -2], [-2, -2], [-6, -1]],              // center pentagon (closes gap)
-      [[-14, -2], [-6, -1], [-2, -2], [2, -2], [5, -6], [-14, -6]] // bottom sweep
+      [[-14, 3], [-14, 6], [-3, 6], [4, 1], [-3, -1]],   // top-left pentagon
+      [[-3, 6], [14, 6], [14, 1], [4, 1]],               // top-right
+      [[4, 1], [14, 1], [14, -6], [8, -6]],              // right-bottom
+      [[-3, -1], [4, 1], [8, -6], [-7, -6]],             // center (large, shared interior edge)
+      [[-14, 3], [-3, -1], [-7, -6], [-14, -6]]          // bottom-left
     ];
 
     // Mobile bounds: x[-7..7], y[-12..12]
     const mobileShards = [
-      [[-7, 12], [7, 12], [7, 6], [1, 4], [-7, 7]],                // top crystal
-      [[-7, 7], [1, 4], [3, -1], [-3, 0], [-7, 1]],                // upper-left
-      [[1, 4], [7, 6], [7, -2], [3, -1]],                          // upper-right
-      [[-7, 1], [-3, 0], [3, -1], [7, -2], [7, -7], [-2, -6], [-7, -5]], // mid sweep
-      [[-7, -5], [-2, -6], [7, -7], [7, -12], [-7, -12]]           // bottom
+      [[-7, 12], [7, 12], [7, 8], [0, 5], [-7, 7]],      // top cap
+      [[7, 8], [7, -6], [-1, -4], [0, 5]],               // mid-right
+      [[-7, 7], [0, 5], [-1, -4], [-7, -8]],             // mid-left
+      [[-7, -8], [-1, -4], [2, -12], [-7, -12]],         // bottom-left
+      [[-1, -4], [7, -6], [7, -12], [2, -12]]            // bottom-right
     ];
 
     const desktopGroup = new THREE.Group();
