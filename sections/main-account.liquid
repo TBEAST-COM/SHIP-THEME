@@ -1,0 +1,30 @@
+<section class="wrap tb-page">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+    <h1 class="tb-page__title" style="margin:0;">{{ 'customer.account.title' | t }}</h1>
+    <div style="display:flex;gap:10px;">
+      <a class="tb-btn tb-btn--ghost" href="{{ routes.account_addresses_url }}">{{ 'customer.addresses.title' | t | default: 'Addresses' }}</a>
+      <a class="tb-btn tb-btn--ghost" href="{{ routes.account_logout_url }}">{{ 'customer.account.logout' | t }}</a>
+    </div>
+  </div>
+  <p style="color:var(--muted);margin-top:8px;">{{ customer.email }}</p>
+
+  <h2 style="font-family:var(--display);font-size:22px;margin:34px 0 18px;">{{ 'customer.account.orders' | t }}</h2>
+  {%- if customer.orders.size > 0 -%}
+    <div style="border:1px solid var(--line);border-radius:18px;overflow:hidden;">
+      {%- for order in customer.orders -%}
+        <a href="{{ order.customer_url }}" style="display:flex;justify-content:space-between;gap:16px;padding:16px 18px;border-bottom:1px solid var(--line-soft);">
+          <span class="mono" style="color:var(--accent-2);">{{ order.name }}</span>
+          <span style="color:var(--muted);">{{ order.created_at | date: '%b %d, %Y' }}</span>
+          <span>{{ order.financial_status_label }}</span>
+          <span style="font-family:var(--display);font-weight:600;">{{ order.total_price | money }}</span>
+        </a>
+      {%- endfor -%}
+    </div>
+  {%- else -%}
+    <p style="color:var(--muted);">{{ 'customer.orders.none' | t }}</p>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{ "name": "Account", "settings": [] }
+{% endschema %}

@@ -1,0 +1,45 @@
+{%- assign col = section.settings.collection -%}
+<section class="wrap" style="padding-block:54px 20px;">
+  <div class="tb-section-head">
+    <div>
+      {%- if section.settings.kicker != blank -%}<div class="tb-kicker">{{ section.settings.kicker }}</div>{%- endif -%}
+      <h2 class="tb-section-title">{{ section.settings.heading }}</h2>
+    </div>
+    {%- if section.settings.show_view_all -%}
+      <a class="tb-btn tb-btn--ghost" style="height:auto;padding:11px 18px;" href="{{ col.url | default: routes.all_products_collection_url }}">{{ 'collections.general.view_all' | t }}</a>
+    {%- endif -%}
+  </div>
+
+  <div class="tb-grid">
+    {%- if col != blank and col.products.size > 0 -%}
+      {%- for product in col.products limit: section.settings.products_to_show -%}
+        {%- render 'product-card', card_product: product -%}
+      {%- endfor -%}
+    {%- else -%}
+      {%- for i in (1..section.settings.products_to_show) -%}
+        <div class="tb-card">
+          <div class="tb-card__media"><span class="tb-visual tb-card__visual"><span class="tb-visual__orb"></span></span></div>
+          <div class="tb-card__body">
+            <div class="tb-card__sub">Product</div>
+            <div class="tb-card__row"><span class="tb-card__name">Example product</span></div>
+            <div class="tb-price"><span class="tb-price__now">{{ 1990 | money }}</span></div>
+          </div>
+        </div>
+      {%- endfor -%}
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Featured collection",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "BEST SELLERS" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Chosen by the pros" },
+    { "type": "collection", "id": "collection", "label": "Collection" },
+    { "type": "range", "id": "products_to_show", "min": 4, "max": 12, "step": 4, "label": "Products to show", "default": 8 },
+    { "type": "checkbox", "id": "show_view_all", "label": "Show 'View all'", "default": true }
+  ],
+  "presets": [{ "name": "Featured collection" }]
+}
+{% endschema %}

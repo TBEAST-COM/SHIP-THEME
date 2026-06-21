@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-contact",
+      "blocks": {
+        "i1": { "type": "info", "settings": { "label": "Email", "value": "support@tbeast.com" } },
+        "i2": { "type": "info", "settings": { "label": "Hours", "value": "Sun–Thu · 9am – 6pm" } }
+      },
+      "block_order": ["i1", "i2"],
+      "settings": {}
+    }
+  },
+  "order": ["main"]
+}

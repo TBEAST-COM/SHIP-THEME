@@ -1,0 +1,30 @@
+{%- comment -%} Quick search overlay with predictive results {%- endcomment -%}
+<div id="tb-search" class="tb-search">
+  <div class="tb-search__scrim" data-search-close></div>
+  <div class="tb-search__panel">
+    <div class="tb-search__box">
+      <form class="tb-search__field" action="{{ routes.search_url }}" method="get" role="search">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent-2)" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input id="tb-search-input" type="search" name="q" autocomplete="off" placeholder="{{ 'general.search.placeholder' | t }}" aria-label="{{ 'general.search.title' | t }}">
+        <button type="button" class="tb-search__esc" data-search-close>ESC</button>
+      </form>
+      <div id="tb-search-results" class="tb-search__results" data-empty="{{ 'general.search.no_results' | t }}">
+        {%- assign seed = collections.all.products | default: collections.first.products -%}
+        {%- for p in seed limit: 5 -%}
+          <a class="tb-search__result" href="{{ p.url }}">
+            <span class="media">{%- if p.featured_image -%}<img src="{{ p.featured_image | image_url: width: 96 }}" alt="">{%- else -%}<span class="tb-visual"><span class="tb-visual__orb"></span></span>{%- endif -%}</span>
+            <span class="info"><b>{{ p.title }}</b><span>{{ p.type | default: p.vendor }}</span></span>
+            <span class="price">{{ p.price | money }}</span>
+          </a>
+        {%- endfor -%}
+      </div>
+    </div>
+    <div class="tb-search__tags">
+      <span>{{ 'general.search.trending' | t }}</span>
+      {%- assign trending = collections.all.products | default: collections.first.products -%}
+      {%- for p in trending limit: 4 -%}
+        <button type="button" class="tb-search__tag" data-search-tag="{{ p.title | escape }}">{{ p.title }}</button>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>

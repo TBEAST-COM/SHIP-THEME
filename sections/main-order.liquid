@@ -1,0 +1,29 @@
+<section class="wrap tb-page" style="max-width:820px;">
+  <nav class="tb-crumb"><a href="{{ routes.account_url }}">{{ 'customer.account.title' | t }}</a> / <b>{{ order.name }}</b></nav>
+  <h1 class="tb-page__title" style="margin-bottom:6px;">{{ order.name }}</h1>
+  <p style="color:var(--muted);">{{ order.created_at | date: '%B %d, %Y' }} · {{ order.financial_status_label }} · {{ order.fulfillment_status_label }}</p>
+
+  <div style="border:1px solid var(--line);border-radius:18px;overflow:hidden;margin-top:24px;">
+    {%- for line in order.line_items -%}
+      <div class="tb-cart-line" style="padding:16px 18px;border-bottom:1px solid var(--line-soft);">
+        <span class="tb-cart-line__media">
+          {%- if line.image -%}<img src="{{ line.image | image_url: width: 132 }}" alt="">{%- else -%}<span class="tb-visual"><span class="tb-visual__orb"></span></span>{%- endif -%}
+        </span>
+        <div style="flex:1;">
+          <div class="tb-cart-line__name">{{ line.title }}</div>
+          <div class="tb-cart-line__variant">× {{ line.quantity }}</div>
+        </div>
+        <span style="font-family:var(--display);font-weight:600;">{{ line.final_line_price | money }}</span>
+      </div>
+    {%- endfor -%}
+    <div style="padding:18px;">
+      <div class="tb-sum"><span>{{ 'general.cart.subtotal' | t }}</span><b>{{ order.subtotal_price | money }}</b></div>
+      <div class="tb-sum"><span>{{ 'general.cart.shipping' | t }}</span><b>{{ order.shipping_price | money }}</b></div>
+      <div class="tb-sum tb-sum--total"><span class="lbl">{{ 'general.cart.total' | t }}</span><span class="val">{{ order.total_price | money }}</span></div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Order", "settings": [] }
+{% endschema %}

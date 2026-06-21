@@ -1,0 +1,30 @@
+{%- comment -%} Standalone animated wave divider — wavy on both edges, transparent bg {%- endcomment -%}
+{%- assign s = section.settings -%}
+<div class="tb-wavesec{% if s.flip %} tb-wavesec--flip{% endif %}"
+  style="--ws-band:{{ s.band_color | default: '#c86a3f' }};--ws-foam:{{ s.foam_color | default: '#ffffff' }};--ws-h:{{ s.height | default: 120 }}px;margin-top:{{ s.gap_top | default: 0 }}px;margin-bottom:{{ s.gap_bottom | default: 0 }}px;">
+  <svg class="tb-wavesec__svg" viewBox="0 0 150 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <g transform="translate(0,2)"><path class="tb-wavesec__l4" fill="none" stroke="currentColor" stroke-linecap="round" style="animation-duration:{{ s.speed | default: 20 }}s;" d="M-160 30 c30 0 58-16 88-16 s58 16 88 16 58-16 88-16 58 16 88 16 58-16 88-16"/></g>
+    <g transform="translate(0,-6)"><path class="tb-wavesec__l1" fill="none" stroke="currentColor" stroke-linecap="round" style="animation-duration:{{ s.speed | default: 20 | times: 1.0 | divided_by: 2.6 }}s;" d="M-160 30 c30 0 58-16 88-16 s58 16 88 16 58-16 88-16 58 16 88 16 58-16 88-16"/></g>
+    <g transform="translate(0,0)"><path class="tb-wavesec__l2" fill="none" stroke="currentColor" stroke-linecap="round" style="animation-duration:{{ s.speed | default: 20 | times: 1.0 | divided_by: 1.8 }}s;" d="M-160 30 c30 0 58-16 88-16 s58 16 88 16 58-16 88-16 58 16 88 16 58-16 88-16"/></g>
+    <g transform="translate(0,6)"><path class="tb-wavesec__l3" fill="none" stroke="currentColor" stroke-linecap="round" style="animation-duration:{{ s.speed | default: 20 | times: 1.0 | divided_by: 1.3 }}s;" d="M-160 30 c30 0 58-16 88-16 s58 16 88 16 58-16 88-16 58 16 88 16 58-16 88-16"/></g>
+  </svg>
+</div>
+
+{% schema %}
+{
+  "name": "Wave divider",
+  "tag": "section",
+  "settings": [
+    { "type": "paragraph", "content": "An animated wave strip — wavy on both edges. Drop it between any two sections as a flowing divider." },
+    { "type": "color", "id": "band_color", "label": "Band color", "default": "#c86a3f" },
+    { "type": "color", "id": "foam_color", "label": "Foam / wave color", "default": "#ffffff" },
+    { "type": "range", "id": "height", "min": 40, "max": 220, "step": 10, "unit": "px", "label": "Height", "default": 120 },
+    { "type": "range", "id": "speed", "min": 6, "max": 40, "step": 1, "unit": "s", "label": "Wave speed", "default": 20 },
+    { "type": "checkbox", "id": "flip", "label": "Flip vertically", "default": false },
+    { "type": "header", "content": "Spacing" },
+    { "type": "range", "id": "gap_top", "min": 0, "max": 80, "step": 2, "unit": "px", "label": "Gap above", "default": 0 },
+    { "type": "range", "id": "gap_bottom", "min": 0, "max": 80, "step": 2, "unit": "px", "label": "Gap below", "default": 0 }
+  ],
+  "presets": [ { "name": "Wave divider" } ]
+}
+{% endschema %}

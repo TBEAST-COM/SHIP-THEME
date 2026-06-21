@@ -1,0 +1,99 @@
+{%- assign band = section.settings.band_color | default: '#caa9d8' -%}
+<div class="tb-mq{% if section.settings.wave_top %} tb-mq--wtop{% endif %}{% if section.settings.wave_bottom %} tb-mq--wbot{% endif %}"
+  style="margin-top:{{ section.settings.top_gap | default: 0 }}px;--mq-band:{{ band }};--mq-speed:{{ section.settings.speed | default: 32 }}s;--mq-h:{{ section.settings.row_height | default: 96 }}px;--mq-logo-h:{{ section.settings.logo_height | default: 38 }}px;">
+
+  {%- if section.settings.wave_top -%}
+  <div class="tb-mq__wave tb-mq__wave--top" aria-hidden="true">
+    <svg viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto" xmlns="http://www.w3.org/2000/svg">
+      <defs><path id="tb-mq-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"/></defs>
+      <g><use href="#tb-mq-wave" x="48" y="0" class="tb-mq__w1"/><use href="#tb-mq-wave" x="48" y="3" class="tb-mq__w2"/><use href="#tb-mq-wave" x="48" y="6" class="tb-mq__w3"/></g>
+    </svg>
+  </div>
+  {%- endif -%}
+
+  <div class="tb-mq__band">
+    <div class="tb-mq__track{% if section.settings.monochrome %} tb-mq--mono{% endif %}">
+      {%- for pass in (1..2) -%}
+      <div class="tb-mq__seq"{% if pass == 2 %} aria-hidden="true"{% endif %}>
+        {%- if section.blocks.size > 0 -%}
+          {%- for block in section.blocks -%}
+            <span class="tb-mq__sep" aria-hidden="true">&#10022;</span>
+            {%- case block.type -%}
+            {%- when 'logo' -%}
+              {%- if block.settings.image != blank -%}
+                {%- if block.settings.link != blank -%}<a href="{{ block.settings.link }}" class="tb-mq__item" {{ block.shopify_attributes }}>{%- else -%}<span class="tb-mq__item" {{ block.shopify_attributes }}>{%- endif -%}
+                  <img src="{{ block.settings.image | image_url: width: 320 }}" alt="{{ block.settings.image.alt | default: 'brand' | escape }}" loading="lazy" style="height:{{ block.settings.scale | default: 100 | divided_by: 100.0 | times: section.settings.logo_height | default: 38 }}px;">
+                {%- if block.settings.link != blank -%}</a>{%- else -%}</span>{%- endif -%}
+              {%- else -%}
+                <span class="tb-mq__item tb-mq__item--ph" {{ block.shopify_attributes }}>LOGO</span>
+              {%- endif -%}
+            {%- when 'text' -%}
+              <span class="tb-mq__item tb-mq__item--text" {{ block.shopify_attributes }}>{{ block.settings.text }}</span>
+            {%- endcase -%}
+          {%- endfor -%}
+        {%- else -%}
+          {%- assign words = 'VOGUE, L''ORÉAL, COSMOPOLITAN, FOX, FORBES, WIRED' | split: ',' -%}
+          {%- for w in words -%}
+            <span class="tb-mq__sep" aria-hidden="true">&#10022;</span>
+            <span class="tb-mq__item tb-mq__item--text">{{ w | strip }}</span>
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+      {%- endfor -%}
+    </div>
+  </div>
+
+  {%- if section.settings.wave_bottom -%}
+  <div class="tb-mq__wave tb-mq__wave--bot" aria-hidden="true">
+    <svg viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto" xmlns="http://www.w3.org/2000/svg">
+      <defs><path id="tb-mq-waveb" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"/></defs>
+      <g><use href="#tb-mq-waveb" x="48" y="0" class="tb-mq__w1"/><use href="#tb-mq-waveb" x="48" y="3" class="tb-mq__w2"/><use href="#tb-mq-waveb" x="48" y="6" class="tb-mq__w3"/></g>
+    </svg>
+  </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Marquee",
+  "settings": [
+    { "type": "header", "content": "Band" },
+    { "type": "color", "id": "band_color", "label": "Band color", "default": "#caa9d8" },
+    { "type": "checkbox", "id": "monochrome", "label": "Make logos white", "default": true },
+    { "type": "range", "id": "row_height", "min": 48, "max": 160, "step": 4, "unit": "px", "label": "Band height", "default": 96 },
+    { "type": "range", "id": "logo_height", "min": 16, "max": 80, "step": 2, "unit": "px", "label": "Logo height", "default": 38 },
+    { "type": "range", "id": "speed", "min": 10, "max": 80, "step": 2, "unit": "s", "label": "Scroll duration", "default": 32 },
+    { "type": "range", "id": "top_gap", "min": 0, "max": 80, "step": 2, "unit": "px", "label": "Top gap", "default": 0 },
+    { "type": "header", "content": "Wave edges" },
+    { "type": "checkbox", "id": "wave_top", "label": "Wave on top edge", "default": false },
+    { "type": "checkbox", "id": "wave_bottom", "label": "Wave on bottom edge", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "logo",
+      "name": "Brand logo",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Logo image" },
+        { "type": "range", "id": "scale", "min": 50, "max": 160, "step": 5, "unit": "%", "label": "Size", "default": 100 },
+        { "type": "url", "id": "link", "label": "Link (optional)" }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text item",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Text", "default": "HI-RES AUDIO" }
+      ]
+    }
+  ],
+  "max_blocks": 24,
+  "presets": [
+    {
+      "name": "Marquee",
+      "blocks": [
+        { "type": "logo" }, { "type": "logo" }, { "type": "logo" }, { "type": "logo" }, { "type": "logo" }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,52 @@
+{%- comment -%} Spin-to-win popup — driven by Theme settings, shown after a delay with a cooldown {%- endcomment -%}
+{%- if settings.spin_enabled -%}
+{%- liquid
+  assign labels = ''
+  assign labels = settings.spin_l1 | append: '|~|' | append: settings.spin_l2 | append: '|~|' | append: settings.spin_l3 | append: '|~|' | append: settings.spin_l4 | append: '|~|' | append: settings.spin_l5 | append: '|~|' | append: settings.spin_l6
+  assign colors = settings.spin_c1 | append: '|~|' | append: settings.spin_c2 | append: '|~|' | append: settings.spin_c3 | append: '|~|' | append: settings.spin_c4 | append: '|~|' | append: settings.spin_c5 | append: '|~|' | append: settings.spin_c6
+  assign codes = settings.spin_code1 | append: '|~|' | append: settings.spin_code2 | append: '|~|' | append: settings.spin_code3 | append: '|~|' | append: settings.spin_code4 | append: '|~|' | append: settings.spin_code5 | append: '|~|' | append: settings.spin_code6
+-%}
+<div id="tb-spin" class="tb-spin"
+  data-delay="{{ settings.spin_delay | default: 30 }}"
+  data-cooldown="{{ settings.spin_cooldown | default: 6 }}"
+  data-labels="{{ labels | escape }}"
+  data-colors="{{ colors | escape }}"
+  data-codes="{{ codes | escape }}"
+  data-i18n-spin="{{ 'general.spin.spin' | t | escape }}"
+  data-i18n-spinning="{{ 'general.spin.spinning' | t | escape }}"
+  data-i18n-copied="{{ 'general.spin.copied' | t | escape }}"
+  data-i18n-tryagain="{{ 'general.spin.try_again' | t | escape }}">
+  <div class="tb-spin__scrim" data-spin-close></div>
+  <div class="tb-spin__panel" role="dialog" aria-modal="true" aria-label="{{ 'general.spin.spin' | t }}">
+    <button class="tb-spin__x" data-spin-close aria-label="{{ 'general.spin.close' | t }}">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <div class="tb-spin__glow"></div>
+
+    <div class="tb-spin__stagewrap" data-spin-stage>
+      {%- if settings.spin_kicker != blank -%}<div class="tb-kicker" style="color:var(--accent-2);text-align:center;">{{ settings.spin_kicker }}</div>{%- endif -%}
+      {%- if settings.spin_heading != blank -%}<h2 class="tb-spin__h">{{ settings.spin_heading }}</h2>{%- endif -%}
+      {%- if settings.spin_subtext != blank -%}<p class="tb-spin__sub">{{ settings.spin_subtext }}</p>{%- endif -%}
+      <div class="tb-spin__stage">
+        <div class="tb-spin__pointer"></div>
+        <canvas width="460" height="460" data-spin-canvas></canvas>
+        <button class="tb-spin__hub" type="button" data-spin-btn>{{ 'general.spin.spin' | t }}</button>
+      </div>
+    </div>
+
+    <div class="tb-spin__win" data-spin-win hidden>
+      <div class="tb-spin__confetti" data-spin-confetti></div>
+      <div class="tb-spin__congrats">{{ 'general.spin.congrats' | t }}</div>
+      <div class="tb-spin__prize" data-spin-prize></div>
+      <div class="tb-spin__codebox">
+        <span class="tb-spin__codelabel">{{ 'general.spin.your_code' | t }}</span>
+        <div class="tb-spin__coderow">
+          <code data-spin-code></code>
+          <button class="tb-spin__copy" type="button" data-spin-copy>{{ 'general.spin.copy' | t }}</button>
+        </div>
+      </div>
+      <div class="tb-spin__note" data-spin-note>{{ 'general.spin.congrats_sub' | t }}</div>
+    </div>
+  </div>
+</div>
+{%- endif -%}

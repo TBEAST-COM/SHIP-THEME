@@ -1,0 +1,129 @@
+{
+  "general": {
+    "accessibility": {
+      "skip_to_content": "تخطَّ إلى المحتوى",
+      "close": "إغلاق",
+      "previous": "السابق",
+      "next": "التالي",
+      "cart": "السلة",
+      "search": "بحث"
+    },
+    "password": {
+      "title": "نفتح قريباً",
+      "text": "أدخل كلمة مرور المتجر للمتابعة.",
+      "placeholder": "كلمة المرور",
+      "submit": "دخول"
+    },
+    "search": {
+      "title": "بحث",
+      "placeholder": "ابحث عن منتج…",
+      "no_results": "لا توجد نتائج",
+      "trending": "الأكثر بحثاً:",
+      "submit": "بحث",
+      "results_for": "نتائج البحث عن \"{{ terms }}\""
+    },
+    "spin": {
+      "spin": "أدر العجلة",
+      "spinning": "جارٍ الدوران…",
+      "your_code": "كود الخصم",
+      "copy": "نسخ الكود",
+      "copied": "تم النسخ!",
+      "congrats": "مبروك! 🎉",
+      "congrats_sub": "تم نسخ الكود — استخدمه عند إتمام الشراء.",
+      "try_again": "بالقرب! حظاً أوفر المرة القادمة.",
+      "close": "إغلاق"
+    },
+    "cart": {
+      "title": "سلّتك",
+      "items_count": "{{ count }} منتج",
+      "empty": "سلّتك فارغة",
+      "start": "ابدأ التسوّق",
+      "subtotal": "المجموع الفرعي",
+      "shipping": "الشحن",
+      "total": "الإجمالي",
+      "checkout": "إتمام الشراء",
+      "secure": "دفع آمن ومشفّر بالكامل",
+      "free": "مجاني",
+      "added": "تمت الإضافة إلى السلّة",
+      "remove": "إزالة",
+      "ship_progress": "أضف {{ amount }} للحصول على شحن مجاني",
+      "ship_unlocked": "🎉 حصلت على شحن مجاني!",
+      "taxes_note": "تُحتسب الضرائب والشحن عند الدفع",
+      "discount_placeholder": "كود الخصم",
+      "discount_apply": "تطبيق",
+      "discount_applied": "سيُطبَّق عند الدفع"
+    },
+    "404": {
+      "title": "الصفحة غير موجودة",
+      "text": "الصفحة التي تبحث عنها غير متوفرة.",
+      "home": "العودة للرئيسية"
+    },
+    "newsletter": {
+      "success": "شكراً لاشتراكك.",
+      "placeholder": "البريد الإلكتروني",
+      "submit": "اشترك"
+    },
+    "countdown": { "days": "يوم", "hours": "ساعة", "mins": "دقيقة", "secs": "ثانية" },
+    "pagination": { "previous": "السابق", "next": "التالي" }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "أضف للسلة",
+      "sold_out": "نفد المخزون",
+      "unavailable": "غير متاح",
+      "in_stock": "متوفر",
+      "low_stock": "كمية محدودة",
+      "quantity": "الكمية",
+      "color": "اللون",
+      "specifications": "المواصفات",
+      "related": "قد يعجبك أيضاً",
+      "reviews": "تقييم",
+      "save": "وفّر {{ amount }}",
+      "buy_now": "اشترِ الآن",
+      "view_details": "عرض التفاصيل",
+      "on_sale": "خصم",
+      "new": "جديد",
+      "from": "ابتداءً من {{ price }}"
+    }
+  },
+  "collections": {
+    "general": {
+      "all_products": "كل المنتجات",
+      "products_count": "{{ count }} منتج",
+      "sort_by": "ترتيب حسب",
+      "featured": "مميّز",
+      "best_selling": "الأكثر مبيعاً",
+      "price_low": "السعر: من الأقل للأعلى",
+      "price_high": "السعر: من الأعلى للأقل",
+      "newest": "الأحدث",
+      "top_rated": "الأعلى تقييماً",
+      "empty": "لا توجد منتجات",
+      "view_all": "عرض الكل",
+      "explore": "استكشف"
+    }
+  },
+  "blogs": {
+    "article": {
+      "read_more": "اقرأ المزيد",
+      "by": "بقلم {{ author }}",
+      "back": "العودة للمدونة",
+      "comments": "التعليقات"
+    }
+  },
+  "contact": {
+    "form": {
+      "name": "الاسم",
+      "email": "البريد الإلكتروني",
+      "phone": "الهاتف",
+      "message": "الرسالة",
+      "submit": "إرسال الرسالة",
+      "success": "شكراً — تم إرسال رسالتك وسنردّ عليك قريباً."
+    }
+  },
+  "customer": {
+    "account": { "title": "الحساب", "details": "تفاصيل الحساب", "orders": "الطلبات", "logout": "تسجيل الخروج" },
+    "login": { "title": "تسجيل الدخول", "email": "البريد الإلكتروني", "password": "كلمة المرور", "submit": "دخول", "create": "إنشاء حساب", "forgot": "نسيت كلمة المرور؟" },
+    "register": { "title": "إنشاء حساب", "first_name": "الاسم الأول", "last_name": "اسم العائلة", "submit": "إنشاء" },
+    "orders": { "none": "لم تقم بأي طلبات بعد." }
+  }
+}

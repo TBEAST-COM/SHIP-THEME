@@ -1,0 +1,40 @@
+<section class="wrap" style="padding-block:48px;">
+  <div class="tb-band">
+    {%- for block in section.blocks -%}
+      <div class="tb-feature" {{ block.shopify_attributes }}>
+        <div class="tb-feature__icon">{{ block.settings.icon | default: '✦' }}</div>
+        <div class="tb-feature__title">{{ block.settings.title }}</div>
+        <div class="tb-feature__desc">{{ block.settings.text }}</div>
+      </div>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Feature band",
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature",
+      "settings": [
+        { "type": "text", "id": "icon", "label": "Icon / symbol", "default": "✦" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Fast shipping" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Delivered within 48h to most cities." }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    {
+      "name": "Feature band",
+      "blocks": [
+        { "type": "feature", "settings": { "icon": "⟁", "title": "Fast shipping", "text": "Delivered within 48h to most cities." } },
+        { "type": "feature", "settings": { "icon": "↺", "title": "30-day returns", "text": "Try it, send it back free if it’s not for you." } },
+        { "type": "feature", "settings": { "icon": "✦", "title": "2-year warranty", "text": "Full coverage across every device." } },
+        { "type": "feature", "settings": { "icon": "⌘", "title": "Human support", "text": "A real team, available around the clock." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

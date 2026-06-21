@@ -1,0 +1,67 @@
+<!doctype html>
+{%- assign is_rtl = false -%}
+{%- if request.locale.iso_code == 'ar' or settings.force_rtl -%}{%- assign is_rtl = true -%}{%- endif -%}
+<html lang="{{ request.locale.iso_code }}" dir="{% if is_rtl %}rtl{% else %}ltr{% endif %}" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="theme-color" content="#221b14">
+  <link rel="canonical" href="{{ canonical_url }}">
+  {%- if settings.favicon != blank -%}
+    <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 64 }}">
+  {%- endif -%}
+
+  <title>{{ page_title }}{% if current_tags %} &ndash; {{ current_tags | join: ', ' }}{% endif %}{% unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless %}</title>
+  {%- if page_description -%}<meta name="description" content="{{ page_description | escape }}">{%- endif -%}
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  {{ content_for_header }}
+
+  {{ 'base.css' | asset_url | stylesheet_tag }}
+  {%- if settings.accent_color != blank or settings.background_color != blank -%}
+  <style>
+    :root{
+      {%- if settings.accent_color != blank %}--accent: {{ settings.accent_color }};{% endif -%}
+      {%- if settings.accent_2_color != blank %}--accent-2: {{ settings.accent_2_color }};{% endif -%}
+      {%- if settings.background_color != blank %}--bg: {{ settings.background_color }};{% endif -%}
+    }
+  </style>
+  {%- endif -%}
+
+  <script>
+    document.documentElement.classList.remove('no-js');
+    {%- if request.design_mode %}document.documentElement.classList.add('tb-editor');{% endif -%}
+    window.TBEAST = window.TBEAST || {};
+    window.TBEAST.moneyFormat = {{ shop.money_format | json }};
+  </script>
+</head>
+
+<body data-added-msg="{{ 'general.cart.added' | t }}">
+  <a class="visually-hidden" href="#MainContent">{{ 'general.accessibility.skip_to_content' | t }}</a>
+
+  {% section 'announcement-bar' %}
+  {% section 'header' %}
+
+  <main id="MainContent" role="main">
+    {{ content_for_layout }}
+  </main>
+
+  {% section 'footer' %}
+
+  {% render 'cart-drawer' %}
+  {% render 'quick-search' %}
+  {% render 'spin-popup' %}
+
+  <div id="tb-toast" class="tb-toast" aria-live="polite">
+    <div class="tb-toast__inner">
+      <span class="tb-toast__check">&#10003;</span>
+      <span class="tb-toast__msg"></span>
+    </div>
+  </div>
+
+  {{ 'theme.js' | asset_url | script_tag }}
+</body>
+</html>

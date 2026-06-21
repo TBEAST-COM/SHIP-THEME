@@ -1,0 +1,6 @@
+{
+  "sections": {
+    "main": { "type": "main-collection-product-grid", "settings": { "show_collection_chips": true } }
+  },
+  "order": ["main"]
+}

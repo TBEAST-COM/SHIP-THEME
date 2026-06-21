@@ -1,0 +1,12 @@
+<section class="wrap" style="min-height:56vh;display:grid;place-items:center;text-align:center;padding-block:80px;">
+  <div>
+    <div class="mono" style="font-size:84px;font-weight:600;color:var(--accent);letter-spacing:.1em;line-height:1;">404</div>
+    <h1 style="font-family:var(--display);font-weight:700;font-size:30px;margin:18px 0 8px;">{{ 'general.404.title' | t }}</h1>
+    <p style="color:var(--muted);max-width:380px;margin:0 auto 24px;">{{ 'general.404.text' | t }}</p>
+    <a class="tb-btn tb-btn--primary" href="{{ routes.root_url }}">{{ 'general.404.home' | t }}</a>
+  </div>
+</section>
+
+{% schema %}
+{ "name": "404", "settings": [] }
+{% endschema %}

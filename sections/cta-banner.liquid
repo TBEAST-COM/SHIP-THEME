@@ -1,0 +1,36 @@
+<section class="wrap" style="padding-block:20px 80px;">
+  <div class="tb-cta">
+    <div class="tb-cta__inner">
+      {%- if section.settings.kicker != blank -%}<div class="tb-kicker" style="color:var(--accent-2);">{{ section.settings.kicker }}</div>{%- endif -%}
+      <h2>{{ section.settings.heading }}</h2>
+      {%- if section.settings.show_form -%}
+        {%- form 'customer', class: 'tb-cta__form' -%}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          <input type="email" name="contact[email]" class="tb-input" placeholder="{{ 'general.newsletter.placeholder' | t }}" required>
+          <button type="submit" class="tb-btn tb-btn--light">{{ section.settings.button_text | default: 'Subscribe' }}</button>
+          {%- if form.posted_successfully? -%}
+            <p style="position:absolute;margin-top:60px;color:var(--ok);">{{ 'general.newsletter.success' | t }}</p>
+          {%- endif -%}
+        {%- endform -%}
+      {%- else -%}
+        <div style="margin-top:28px;">
+          <a class="tb-btn tb-btn--light" href="{{ section.settings.button_link | default: routes.all_products_collection_url }}">{{ section.settings.button_text }}</a>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "CTA banner",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "JOIN THE PACK" },
+    { "type": "textarea", "id": "heading", "label": "Heading", "default": "Subscribe for free shipping and 10% off your first order" },
+    { "type": "checkbox", "id": "show_form", "label": "Show email signup form", "default": true },
+    { "type": "text", "id": "button_text", "label": "Button text", "default": "Start shopping" },
+    { "type": "url", "id": "button_link", "label": "Button link (if no form)" }
+  ],
+  "presets": [{ "name": "CTA banner" }]
+}
+{% endschema %}

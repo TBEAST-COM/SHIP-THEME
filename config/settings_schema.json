@@ -1,0 +1,90 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "TBEAST",
+    "theme_version": "1.0.0",
+    "theme_author": "TBEAST",
+    "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
+    "theme_support_url": "https://help.shopify.com/"
+  },
+  {
+    "name": "Logo & Brand",
+    "settings": [
+      { "type": "image_picker", "id": "logo", "label": "Logo image" },
+      { "type": "range", "id": "logo_width", "min": 60, "max": 220, "step": 5, "unit": "px", "label": "Logo width", "default": 120 },
+      { "type": "text", "id": "brand_tagline", "label": "Brand tagline", "default": "SOUND · POWER · FUTURE" },
+      { "type": "image_picker", "id": "favicon", "label": "Favicon" }
+    ]
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      { "type": "header", "content": "Leave blank to use the built-in warm-earthy palette" },
+      { "type": "color", "id": "background_color", "label": "Background", "default": "#221b14" },
+      { "type": "color", "id": "accent_color", "label": "Accent (terracotta)", "default": "#c86a3f" },
+      { "type": "color", "id": "accent_2_color", "label": "Accent 2 (gold)", "default": "#d9a23f" }
+    ]
+  },
+  {
+    "name": "Layout & Direction",
+    "settings": [
+      { "type": "checkbox", "id": "force_rtl", "label": "Force right-to-left (RTL)", "info": "Arabic locale enables RTL automatically.", "default": false },
+      { "type": "checkbox", "id": "show_language_toggle", "label": "Show language switcher", "default": true }
+    ]
+  },
+  {
+    "name": "Cart",
+    "settings": [
+      { "type": "checkbox", "id": "enable_cart_drawer", "label": "Open cart as a slide-out drawer", "default": true },
+      { "type": "range", "id": "free_shipping_threshold", "min": 0, "max": 1000, "step": 10, "unit": "$", "label": "Free shipping threshold", "info": "Set 0 to hide the progress bar.", "default": 200 }
+    ]
+  },
+  {
+    "name": "Product card",
+    "settings": [
+      { "type": "checkbox", "id": "card_hover_reveal", "label": "Reveal second image on hover", "default": true },
+      { "type": "checkbox", "id": "card_quick_add", "label": "Show quick-add button", "default": true },
+      { "type": "checkbox", "id": "card_show_vendor", "label": "Show vendor / type", "default": true }
+    ]
+  },
+  {
+    "name": "Spin to Win popup",
+    "settings": [
+      { "type": "header", "content": "A spin-to-win discount wheel that pops up after a delay" },
+      { "type": "checkbox", "id": "spin_enabled", "label": "Enable spin-to-win popup", "default": true },
+      { "type": "text", "id": "spin_kicker", "label": "Eyebrow", "default": "EXCLUSIVE OFFER" },
+      { "type": "text", "id": "spin_heading", "label": "Heading", "default": "Spin to win a discount" },
+      { "type": "textarea", "id": "spin_subtext", "label": "Subtext", "default": "One spin per visitor. Land on a prize and the code is yours." },
+      { "type": "range", "id": "spin_delay", "min": 0, "max": 120, "step": 5, "unit": "s", "label": "Show after (delay)", "default": 30 },
+      { "type": "range", "id": "spin_cooldown", "min": 1, "max": 72, "step": 1, "unit": "h", "label": "Don't show again for", "default": 6 },
+      { "type": "header", "content": "Wheel segments (leave code blank for a \"try again\" wedge)" },
+      { "type": "text", "id": "spin_l1", "label": "Segment 1 label", "default": "5% OFF" },
+      { "type": "color", "id": "spin_c1", "label": "Segment 1 color", "default": "#2a2018" },
+      { "type": "text", "id": "spin_code1", "label": "Segment 1 code", "default": "BEAST5" },
+      { "type": "text", "id": "spin_l2", "label": "Segment 2 label", "default": "10% OFF" },
+      { "type": "color", "id": "spin_c2", "label": "Segment 2 color", "default": "#c86a3f" },
+      { "type": "text", "id": "spin_code2", "label": "Segment 2 code", "default": "BEAST10" },
+      { "type": "text", "id": "spin_l3", "label": "Segment 3 label", "default": "TRY AGAIN" },
+      { "type": "color", "id": "spin_c3", "label": "Segment 3 color", "default": "#2a2018" },
+      { "type": "text", "id": "spin_code3", "label": "Segment 3 code", "default": "" },
+      { "type": "text", "id": "spin_l4", "label": "Segment 4 label", "default": "15% OFF" },
+      { "type": "color", "id": "spin_c4", "label": "Segment 4 color", "default": "#d9a23f" },
+      { "type": "text", "id": "spin_code4", "label": "Segment 4 code", "default": "BEAST15" },
+      { "type": "text", "id": "spin_l5", "label": "Segment 5 label", "default": "FREE SHIP" },
+      { "type": "color", "id": "spin_c5", "label": "Segment 5 color", "default": "#2a2018" },
+      { "type": "text", "id": "spin_code5", "label": "Segment 5 code", "default": "FREESHIP" },
+      { "type": "text", "id": "spin_l6", "label": "Segment 6 label", "default": "20% OFF" },
+      { "type": "color", "id": "spin_c6", "label": "Segment 6 color", "default": "#c86a3f" },
+      { "type": "text", "id": "spin_code6", "label": "Segment 6 code", "default": "BEAST20" }
+    ]
+  },
+  {
+    "name": "Social",
+    "settings": [
+      { "type": "text", "id": "social_instagram", "label": "Instagram URL" },
+      { "type": "text", "id": "social_x", "label": "X / Twitter URL" },
+      { "type": "text", "id": "social_youtube", "label": "YouTube URL" },
+      { "type": "text", "id": "social_tiktok", "label": "TikTok URL" }
+    ]
+  }
+]

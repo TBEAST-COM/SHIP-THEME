@@ -1,0 +1,55 @@
+<section class="wrap tb-page">
+  <h1 class="tb-page__title">{{ 'general.cart.title' | t }}</h1>
+
+  {%- if cart.item_count == 0 -%}
+    <div class="tb-empty" style="border:1px solid var(--line);border-radius:22px;max-width:520px;">
+      <div class="tb-empty__icon">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 2 3 6v13a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      </div>
+      <div style="font-size:16px;color:var(--muted)">{{ 'general.cart.empty' | t }}</div>
+      <a class="tb-btn tb-btn--primary" style="margin-top:22px;" href="{{ routes.all_products_collection_url }}">{{ 'general.cart.start' | t }}</a>
+    </div>
+  {%- else -%}
+    <form action="{{ routes.cart_url }}" method="post" novalidate>
+      <div style="display:grid;grid-template-columns:1fr 360px;gap:40px;align-items:start;">
+        <div>
+          {%- for item in cart.items -%}
+            <div class="tb-cart-line" style="padding:18px 0;" data-key="{{ item.key }}">
+              <a href="{{ item.url }}" class="tb-cart-line__media" style="width:96px;height:108px;">
+                {%- if item.image -%}<img src="{{ item.image | image_url: width: 200 }}" alt="{{ item.title | escape }}">
+                {%- else -%}<span class="tb-visual"><span class="tb-visual__orb"></span></span>{%- endif -%}
+              </a>
+              <div style="flex:1;min-width:0;">
+                <div class="tb-cart-line__top">
+                  <a href="{{ item.url }}" class="tb-cart-line__name" style="font-size:17px;">{{ item.product.title }}</a>
+                  <a class="tb-remove" href="{{ item.url_to_remove }}" data-key="{{ item.key }}" data-qty="0">{{ 'general.cart.remove' | t }}</a>
+                </div>
+                {%- unless item.variant.title contains 'Default' -%}<div class="tb-cart-line__variant">{{ item.variant.title }}</div>{%- endunless -%}
+                <div class="tb-cart-line__bottom" style="margin-top:16px;">
+                  <div class="tb-mini-step" style="height:40px;">
+                    <button type="button" style="width:40px;height:40px;" data-qty="{{ item.quantity | minus: 1 }}" data-key="{{ item.key }}">&minus;</button>
+                    <span style="width:40px;">{{ item.quantity }}</span>
+                    <button type="button" style="width:40px;height:40px;" data-qty="{{ item.quantity | plus: 1 }}" data-key="{{ item.key }}">+</button>
+                  </div>
+                  <span style="font-family:var(--display);font-weight:700;font-size:18px;">{{ item.final_line_price | money }}</span>
+                </div>
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+
+        <aside style="position:sticky;top:96px;border:1px solid var(--line);border-radius:20px;padding:24px;background:var(--card);">
+          <div class="tb-sum" style="font-size:15px;"><span>{{ 'general.cart.subtotal' | t }}</span><b>{{ cart.total_price | money }}</b></div>
+          <div class="tb-sum" style="font-size:13.5px;color:var(--faint);"><span>{{ 'general.cart.taxes_note' | t }}</span></div>
+          <div class="tb-sum tb-sum--total"><span class="lbl">{{ 'general.cart.total' | t }}</span><span class="val">{{ cart.total_price | money }}</span></div>
+          <button type="submit" name="checkout" class="tb-btn tb-btn--primary tb-btn--block" style="margin-top:8px;">{{ 'general.cart.checkout' | t }}</button>
+          <div class="tb-secure">{{ 'general.cart.secure' | t }}</div>
+        </aside>
+      </div>
+    </form>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{ "name": "Cart", "settings": [] }
+{% endschema %}

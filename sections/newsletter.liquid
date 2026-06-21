@@ -1,0 +1,36 @@
+{%- comment -%} Newsletter signup {%- endcomment -%}
+<section class="wrap tb-reveal" style="padding-block:48px;">
+  <div class="tb-news" style="--news-bg:{{ section.settings.bg_color }};">
+    <div class="tb-news__glow"></div>
+    <div class="tb-news__inner">
+      {%- if section.settings.kicker != blank -%}<div class="tb-kicker" style="color:var(--accent-2);">{{ section.settings.kicker }}</div>{%- endif -%}
+      {%- if section.settings.heading != blank -%}<h2 class="tb-section-title" style="font-size:clamp(26px,3.6vw,38px);max-width:560px;">{{ section.settings.heading }}</h2>{%- endif -%}
+      {%- if section.settings.text != blank -%}<p style="color:var(--muted);margin-top:12px;max-width:460px;">{{ section.settings.text }}</p>{%- endif -%}
+      {%- form 'customer', class: 'tb-news__form' -%}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        {%- if form.posted_successfully? -%}
+          <p class="tb-news__ok">&#10003; {{ 'general.newsletter.success' | t }}</p>
+        {%- else -%}
+          <input type="email" name="contact[email]" required placeholder="{{ 'general.newsletter.placeholder' | t }}" class="tb-news__input" aria-label="Email">
+          <button type="submit" class="tb-btn tb-btn--primary">{{ section.settings.button_text }}</button>
+        {%- endif -%}
+      {%- endform -%}
+      {%- if section.settings.note != blank -%}<div class="tb-news__note">{{ section.settings.note }}</div>{%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "settings": [
+    { "type": "color", "id": "bg_color", "label": "Background", "default": "#2a2018" },
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "JOIN THE PACK" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Get 10% off your first order" },
+    { "type": "text", "id": "text", "label": "Text", "default": "Subscribe for early drops, exclusive deals and free shipping codes." },
+    { "type": "text", "id": "button_text", "label": "Button text", "default": "Subscribe" },
+    { "type": "text", "id": "note", "label": "Fine print", "default": "No spam. Unsubscribe anytime." }
+  ],
+  "presets": [ { "name": "Newsletter" } ]
+}
+{% endschema %}

@@ -1,0 +1,16 @@
+{
+  "current": {
+    "brand_tagline": "SOUND · POWER · FUTURE",
+    "logo_width": 120,
+    "background_color": "#221b14",
+    "accent_color": "#c86a3f",
+    "accent_2_color": "#d9a23f",
+    "force_rtl": false,
+    "show_language_toggle": true,
+    "enable_cart_drawer": true,
+    "free_shipping_threshold": 200,
+    "card_hover_reveal": true,
+    "card_quick_add": true,
+    "card_show_vendor": true
+  }
+}

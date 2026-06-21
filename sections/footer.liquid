@@ -1,0 +1,77 @@
+<footer class="tb-footer{% if section.settings.enable_wave %} tb-footer--wave{% endif %}"{% if section.settings.enable_wave %} style="--wave-color:{{ section.settings.wave_color }};--wave-color-2:{{ section.settings.wave_color_2 }};"{% endif %}>
+  {%- if section.settings.enable_wave -%}
+  <div class="tb-wave" aria-hidden="true">
+    <svg class="tb-wave__svg" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto" xmlns="http://www.w3.org/2000/svg">
+      <defs><path id="tb-gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"/></defs>
+      <g class="tb-wave__parallax">
+        <use href="#tb-gentle-wave" x="48" y="0" class="tb-wave__l1"/>
+        <use href="#tb-gentle-wave" x="48" y="3" class="tb-wave__l2"/>
+        <use href="#tb-gentle-wave" x="48" y="5" class="tb-wave__l3"/>
+        <use href="#tb-gentle-wave" x="48" y="7" class="tb-wave__l4"/>
+      </g>
+    </svg>
+  </div>
+  {%- endif -%}
+  <div class="wrap tb-footer__top">
+    <div class="tb-footer__col">
+      <a href="{{ routes.root_url }}" class="tb-logo" style="margin-bottom:14px;">
+        <span class="tb-logo__mark">T</span>
+        <span class="tb-logo__name">{{ shop.name | default: 'TBEAST' }}</span>
+      </a>
+      <p class="tb-footer__tag" style="max-width:260px;line-height:1.6;">{{ section.settings.footer_text | default: settings.brand_tagline }}</p>
+      <div class="tb-socials">
+        {%- if settings.social_instagram != blank -%}<a class="tb-social" href="{{ settings.social_instagram }}" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>{%- endif -%}
+        {%- if settings.social_x != blank -%}<a class="tb-social" href="{{ settings.social_x }}" aria-label="X"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 3h3l-7 8 8 10h-6l-5-6-5 6H3l8-9L3 3h6l4 5z"/></svg></a>{%- endif -%}
+        {%- if settings.social_youtube != blank -%}<a class="tb-social" href="{{ settings.social_youtube }}" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="2" y="5" width="20" height="14" rx="4"/><path d="m10 9 5 3-5 3z" fill="currentColor" stroke="none"/></svg></a>{%- endif -%}
+        {%- if settings.social_tiktok != blank -%}<a class="tb-social" href="{{ settings.social_tiktok }}" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 5.82A4.27 4.27 0 0 1 15.54 3h-3.41v13.67a2.59 2.59 0 0 1-2.59 2.5 2.59 2.59 0 0 1-2.59-2.59 2.59 2.59 0 0 1 3.39-2.46V8.18a6 6 0 0 0-7 5.93A6 6 0 0 0 9.5 20a6 6 0 0 0 6-6V9.01a7.62 7.62 0 0 0 4.46 1.43V7.05a4.27 4.27 0 0 1-3.36-1.23z"/></svg></a>{%- endif -%}
+      </div>
+    </div>
+
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'menu' and block.settings.menu != blank -%}
+        <div class="tb-footer__col" {{ block.shopify_attributes }}>
+          <h4>{{ block.settings.heading }}</h4>
+          {%- for link in block.settings.menu.links -%}
+            <a href="{{ link.url }}">{{ link.title }}</a>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+
+  <div class="wrap tb-footer__bottom">
+    <div class="tb-footer__tag">© {{ 'now' | date: '%Y' }} {{ shop.name }} — {{ section.settings.copyright | default: 'All rights reserved' }}</div>
+    <div class="tb-footer__tag">{{ powered_by_link }}</div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    { "type": "text", "id": "footer_text", "label": "Tagline" },
+    { "type": "text", "id": "copyright", "label": "Copyright line", "default": "All rights reserved" },
+    { "type": "header", "content": "Animated wave" },
+    { "type": "checkbox", "id": "enable_wave", "label": "Enable animated wave top", "default": true },
+    { "type": "color", "id": "wave_color", "label": "Wave color (top)", "default": "#c86a3f" },
+    { "type": "color", "id": "wave_color_2", "label": "Wave color (bottom)", "default": "#7a3b22" }
+  ],
+  "blocks": [
+    {
+      "type": "menu",
+      "name": "Menu column",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Shop" },
+        { "type": "link_list", "id": "menu", "label": "Menu" }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      { "type": "menu", "settings": { "heading": "Shop" } },
+      { "type": "menu", "settings": { "heading": "Company" } },
+      { "type": "menu", "settings": { "heading": "Support" } }
+    ]
+  }
+}
+{% endschema %}

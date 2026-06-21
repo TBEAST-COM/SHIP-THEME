@@ -1,0 +1,34 @@
+{%- comment -%} Trust / guarantee badges row {%- endcomment -%}
+<section class="wrap tb-reveal" style="padding-block:40px;">
+  <div class="tb-trust">
+    {%- for block in section.blocks -%}
+      <div class="tb-trust__item" {{ block.shopify_attributes }}>
+        <span class="tb-trust__icon">{{ block.settings.icon }}</span>
+        <div>
+          <div class="tb-trust__title">{{ block.settings.title }}</div>
+          <div class="tb-trust__sub">{{ block.settings.subtitle }}</div>
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Trust badges",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "badge",
+      "name": "Badge",
+      "settings": [
+        { "type": "text", "id": "icon", "label": "Icon (emoji or char)", "default": "⟁" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Fast shipping" },
+        { "type": "text", "id": "subtitle", "label": "Subtitle", "default": "Delivered in 48h" }
+      ]
+    }
+  ],
+  "max_blocks": 5,
+  "presets": [ { "name": "Trust badges", "blocks": [ { "type": "badge" }, { "type": "badge" }, { "type": "badge" }, { "type": "badge" } ] } ]
+}
+{% endschema %}

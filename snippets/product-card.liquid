@@ -1,0 +1,48 @@
+{%- comment -%} Renders a product card. Params: card_product {%- endcomment -%}
+{%- liquid
+  assign p = card_product
+  assign on_sale = false
+  if p.compare_at_price > p.price
+    assign on_sale = true
+  endif
+  assign is_new = false
+  if p.tags contains 'new' or p.tags contains 'New'
+    assign is_new = true
+  endif
+  assign second = p.images[1]
+  assign rating = p.metafields.reviews.rating.value
+-%}
+<div class="tb-card{% if settings.card_hover_reveal and second %} tb-card--reveal{% endif %}">
+  <a class="tb-card__media" href="{{ p.url }}" aria-label="{{ p.title | escape }}">
+    {%- if on_sale -%}<span class="tb-badge">{{ 'products.product.on_sale' | t }}</span>
+    {%- elsif is_new -%}<span class="tb-badge tb-badge--new">{{ 'products.product.new' | t }}</span>{%- endif -%}
+
+    {%- if p.featured_image -%}
+      {%- if settings.card_hover_reveal and second -%}
+        <img class="tb-card__img--back" src="{{ second | image_url: width: 600 }}" alt="" loading="lazy" width="600" height="600">
+        <img class="tb-card__img--front" src="{{ p.featured_image | image_url: width: 600 }}" alt="{{ p.featured_image.alt | escape }}" loading="lazy" width="600" height="600">
+      {%- else -%}
+        <img class="tb-card__img--front" src="{{ p.featured_image | image_url: width: 600 }}" alt="{{ p.featured_image.alt | escape }}" loading="lazy" width="600" height="600">
+      {%- endif -%}
+    {%- else -%}
+      <span class="tb-visual tb-card__visual"><span class="tb-visual__orb"></span></span>
+    {%- endif -%}
+
+    {%- if settings.card_quick_add and p.available -%}
+      <button type="button" class="tb-quickadd" aria-label="{{ 'products.product.add_to_cart' | t }}"
+        data-add-id="{{ p.selected_or_first_available_variant.id }}" data-add-qty="1">+</button>
+    {%- endif -%}
+  </a>
+  <div class="tb-card__body">
+    {%- if settings.card_show_vendor and p.type != blank -%}
+      <div class="tb-card__sub">{{ p.type }}</div>
+    {%- elsif settings.card_show_vendor and p.vendor != blank -%}
+      <div class="tb-card__sub">{{ p.vendor }}</div>
+    {%- endif -%}
+    <div class="tb-card__row">
+      <a class="tb-card__name" href="{{ p.url }}">{{ p.title }}</a>
+      {%- if rating != blank -%}<span class="tb-card__rating">&#9733; {{ rating }}</span>{%- endif -%}
+    </div>
+    {%- render 'price', product: p -%}
+  </div>
+</div>

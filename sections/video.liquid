@@ -1,0 +1,72 @@
+{%- comment -%} Video section — native upload or YouTube/Vimeo, cover + click-to-play or autoplay background {%- endcomment -%}
+{%- assign s = section.settings -%}
+<section class="{% unless s.full_width %}wrap {% endunless %}tb-reveal" style="padding-block:{% if s.full_width %}0{% else %}48px{% endif %};">
+  {%- if s.heading != blank and s.full_width == false -%}
+    <div class="tb-section-head" style="justify-content:center;text-align:center;flex-direction:column;align-items:center;">
+      <div>
+        {%- if s.kicker != blank -%}<div class="tb-kicker">{{ s.kicker }}</div>{%- endif -%}
+        <h2 class="tb-section-title">{{ s.heading }}</h2>
+      </div>
+    </div>
+  {%- endif -%}
+
+  <div class="tb-video{% if s.full_width %} tb-video--full{% endif %}" style="--vid-ratio:{{ s.ratio }};--vid-radius:{% if s.full_width %}0{% else %}var(--radius){% endif %};">
+    {%- if s.autoplay_bg and s.video != blank -%}
+      {{ s.video | video_tag: image_size: '1600x', autoplay: true, loop: true, muted: true, controls: false, playsinline: true, class: 'tb-video__bg' }}
+      {%- if s.overlay_heading != blank or s.button_text != blank -%}
+        <div class="tb-video__overlay">
+          {%- if s.overlay_kicker != blank -%}<div class="tb-kicker" style="color:var(--accent-2);">{{ s.overlay_kicker }}</div>{%- endif -%}
+          {%- if s.overlay_heading != blank -%}<h2 class="tb-video__title">{{ s.overlay_heading }}</h2>{%- endif -%}
+          {%- if s.button_text != blank -%}<a class="tb-btn tb-btn--primary" style="margin-top:22px;" href="{{ s.button_link | default: routes.all_products_collection_url }}">{{ s.button_text }}</a>{%- endif -%}
+        </div>
+      {%- endif -%}
+    {%- else -%}
+      <div class="tb-video__player" data-video-player
+        {%- if s.video != blank %} data-video-type="native"{%- elsif s.video_url != blank %} data-video-type="external" data-video-id="{{ s.video_url.id }}" data-video-host="{{ s.video_url.type }}"{%- endif -%}>
+        <div class="tb-video__cover">
+          {%- if s.cover != blank -%}
+            <img src="{{ s.cover | image_url: width: 1600 }}" alt="{{ s.heading | escape }}" loading="lazy">
+          {%- elsif s.video != blank and s.video.preview_image -%}
+            <img src="{{ s.video.preview_image | image_url: width: 1600 }}" alt="{{ s.heading | escape }}" loading="lazy">
+          {%- else -%}
+            <span class="tb-visual" style="width:100%;height:100%;"><span class="tb-visual__orb"></span></span>
+          {%- endif -%}
+          <span class="tb-video__shade"></span>
+          <button class="tb-video__play" aria-label="Play video" type="button">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+          {%- if s.label != blank -%}<span class="tb-video__label">{{ s.label }}</span>{%- endif -%}
+        </div>
+        {%- if s.video != blank -%}
+          <template data-video-embed>{{ s.video | video_tag: image_size: '1600x', autoplay: true, loop: s.loop, muted: false, controls: true, playsinline: true, class: 'tb-video__media' }}</template>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Video",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "WATCH" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "See it in action" },
+    { "type": "header", "content": "Video source" },
+    { "type": "video", "id": "video", "label": "Video (hosted upload)" },
+    { "type": "video_url", "id": "video_url", "label": "Or video URL (YouTube / Vimeo)", "accept": ["youtube", "vimeo"] },
+    { "type": "image_picker", "id": "cover", "label": "Cover image" },
+    { "type": "text", "id": "label", "label": "Cover label", "default": "" },
+    { "type": "header", "content": "Layout" },
+    { "type": "checkbox", "id": "full_width", "label": "Full width", "default": false },
+    { "type": "select", "id": "ratio", "label": "Aspect ratio", "options": [ {"value":"16/9","label":"16:9"}, {"value":"21/9","label":"21:9 (cinematic)"}, {"value":"4/3","label":"4:3"}, {"value":"1/1","label":"1:1"} ], "default": "16/9" },
+    { "type": "checkbox", "id": "loop", "label": "Loop video", "default": false },
+    { "type": "header", "content": "Autoplay background (hosted video only)" },
+    { "type": "checkbox", "id": "autoplay_bg", "label": "Autoplay as muted background", "default": false },
+    { "type": "text", "id": "overlay_kicker", "label": "Overlay kicker" },
+    { "type": "text", "id": "overlay_heading", "label": "Overlay heading" },
+    { "type": "text", "id": "button_text", "label": "Overlay button text" },
+    { "type": "url", "id": "button_link", "label": "Overlay button link" }
+  ],
+  "presets": [ { "name": "Video" } ]
+}
+{% endschema %}

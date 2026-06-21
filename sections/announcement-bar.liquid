@@ -1,0 +1,21 @@
+{%- if section.settings.text != blank -%}
+<div class="tb-announce">
+  <div class="wrap tb-announce__row">
+    {%- if section.settings.icon != blank -%}<span>{{ section.settings.icon }}</span>{%- endif -%}
+    <span>{{ section.settings.text }}</span>
+    {%- if section.settings.link != blank -%}<a href="{{ section.settings.link }}"><b>{{ section.settings.link_text }}</b></a>{%- endif -%}
+  </div>
+</div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Announcement bar",
+  "settings": [
+    { "type": "text", "id": "icon", "label": "Leading symbol", "default": "◆" },
+    { "type": "text", "id": "text", "label": "Text", "default": "Free shipping on orders over $200 — 2-year warranty on every device" },
+    { "type": "text", "id": "link_text", "label": "Link label", "default": "Shop now" },
+    { "type": "url", "id": "link", "label": "Link" }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,147 @@
+{%- assign product = section.settings.product | default: product -%}
+{%- assign cv = product.selected_or_first_available_variant -%}
+<section class="wrap" style="padding-block:30px 90px;" data-product>
+  <nav class="tb-crumb">
+    <a href="{{ routes.root_url }}">{{ shop.name }}</a> /
+    {%- if product.collections.first -%}<a href="{{ product.collections.first.url }}">{{ product.collections.first.title }}</a> / {%- endif -%}
+    <b>{{ product.title }}</b>
+  </nav>
+
+  <div class="tb-product">
+    <!-- gallery -->
+    <div class="tb-gallery" data-gallery>
+      {%- if product.images.size > 0 -%}
+        <div class="tb-thumbs">
+          {%- for image in product.images limit: 5 -%}
+            <button type="button" class="tb-thumb {% if forloop.first %}is-active{% endif %}" data-thumb="{{ image | image_url: width: 900 }}" aria-label="Image {{ forloop.index }}">
+              <img src="{{ image | image_url: width: 160 }}" alt="{{ image.alt | escape }}">
+            </button>
+          {%- endfor -%}
+        </div>
+        <div class="tb-stage">
+          <img data-stage-img src="{{ product.featured_image | image_url: width: 1000 }}" alt="{{ product.featured_image.alt | escape }}" class="tb-stage__zoom">
+          {%- if product.compare_at_price > product.price -%}<span class="tb-badge" style="inset-inline-start:auto;inset-inline-end:16px;top:16px;">{{ 'products.product.on_sale' | t }}</span>{%- endif -%}
+        </div>
+      {%- else -%}
+        <div class="tb-thumbs">
+          {%- for i in (1..4) -%}<button type="button" class="tb-thumb {% if forloop.first %}is-active{% endif %}"><span class="tb-visual"><span class="tb-visual__orb" style="width:60%"></span></span></button>{%- endfor -%}
+        </div>
+        <div class="tb-stage">
+          <span class="tb-visual"><span class="tb-visual__orb" style="border-width:6px"></span></span>
+          <span class="tb-stage__tag">{{ product.title | upcase | truncate: 16, '' }}</span>
+        </div>
+      {%- endif -%}
+    </div>
+
+    <!-- info -->
+    <div>
+      <div class="tb-product__meta">
+        {%- if product.available -%}
+          <span class="tb-status"><span class="tb-dot"></span>{{ 'products.product.in_stock' | t }}</span>
+        {%- else -%}
+          <span class="tb-status" style="color:var(--faint);"><span class="tb-dot" style="background:var(--faint);box-shadow:none;"></span>{{ 'products.product.sold_out' | t }}</span>
+        {%- endif -%}
+        {%- assign rating = product.metafields.reviews.rating.value -%}
+        {%- if rating != blank -%}
+          <span class="mono" style="color:var(--accent-2);font-size:12.5px;">&#9733; {{ rating }}</span>
+          <span style="color:var(--faint);font-size:12.5px;">({{ product.metafields.reviews.rating_count }} {{ 'products.product.reviews' | t }})</span>
+        {%- endif -%}
+      </div>
+
+      <h1>{{ product.title }}</h1>
+      {%- if product.description != blank -%}
+        <p class="tb-product__blurb">{{ product.description | strip_html | truncatewords: 36 }}</p>
+      {%- endif -%}
+
+      <div class="tb-product__price">
+        <span class="now" data-price-now>{{ cv.price | money }}</span>
+        {%- if product.compare_at_price > product.price -%}
+          <span class="was">{{ product.compare_at_price | money }}</span>
+          {%- assign saved = product.compare_at_price | minus: product.price -%}
+          <span class="tb-save">{{ 'products.product.save' | t: amount: saved | money }}</span>
+        {%- endif -%}
+      </div>
+
+      <form data-product-form data-variant-form action="{{ routes.cart_add_url }}" method="post">
+        <script type="application/json" data-variant-json>[{% for v in product.variants %}{"id":{{ v.id }},"options":{{ v.options | json }},"price":{{ v.price }},"available":{{ v.available }}}{% unless forloop.last %},{% endunless %}{% endfor %}]</script>
+
+        {%- unless product.has_only_default_variant -%}
+          {%- for option in product.options_with_values -%}
+            <div class="tb-opt">
+              <div class="tb-opt__head"><span>{{ option.name }}</span><b data-variant-label>{{ option.selected_value }}</b></div>
+              <div class="tb-pills" role="radiogroup" aria-label="{{ option.name }}">
+                {%- for value in option.values -%}
+                  <label class="tb-vpill {% if option.selected_value == value %}is-active{% endif %}">
+                    <input type="radio" name="option{{ option.position }}" value="{{ value | escape }}" data-option {% if option.selected_value == value %}checked{% endif %}>
+                    {{ value }}
+                  </label>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        {%- endunless -%}
+
+        <input type="hidden" name="id" value="{{ cv.id }}">
+
+        <div class="tb-buybar">
+          <div class="tb-stepper">
+            <button type="button" data-step="down" data-target="tb-qty" aria-label="Decrease">&minus;</button>
+            <input id="tb-qty" type="number" name="quantity" value="1" min="1" inputmode="numeric">
+            <button type="button" data-step="up" data-target="tb-qty" aria-label="Increase">+</button>
+          </div>
+          <button type="submit" class="tb-btn tb-btn--primary" style="flex:1" {% unless product.available %}disabled{% endunless %}>
+            {%- if product.available -%}{{ 'products.product.add_to_cart' | t }}{%- else -%}{{ 'products.product.sold_out' | t }}{%- endif -%}
+          </button>
+        </div>
+      </form>
+
+      <!-- specs -->
+      {%- assign specs = product.metafields.custom.specs.value -%}
+      <dl class="tb-specs">
+        <div class="tb-specs__head">{{ 'products.product.specifications' | t }}</div>
+        {%- if specs != blank and specs.size > 0 -%}
+          {%- for row in specs -%}
+            <div class="tb-specs__row"><dt>{{ row.label | default: row.first }}</dt><dd>{{ row.value | default: row.last }}</dd></div>
+          {%- endfor -%}
+        {%- else -%}
+          {%- if product.type != blank -%}<div class="tb-specs__row"><dt>Type</dt><dd>{{ product.type }}</dd></div>{%- endif -%}
+          {%- if product.vendor != blank -%}<div class="tb-specs__row"><dt>Brand</dt><dd>{{ product.vendor }}</dd></div>{%- endif -%}
+          {%- if cv.sku != blank -%}<div class="tb-specs__row"><dt>SKU</dt><dd>{{ cv.sku }}</dd></div>{%- endif -%}
+          {%- if cv.weight > 0 -%}<div class="tb-specs__row"><dt>Weight</dt><dd>{{ cv.weight | weight_with_unit: cv.weight_unit }}</dd></div>{%- endif -%}
+          <div class="tb-specs__row"><dt>Availability</dt><dd>{% if product.available %}{{ 'products.product.in_stock' | t }}{% else %}{{ 'products.product.sold_out' | t }}{% endif %}</dd></div>
+        {%- endif -%}
+      </dl>
+
+      {%- if product.description != blank -%}
+        <div class="rte" style="margin-top:30px;">{{ product.description }}</div>
+      {%- endif -%}
+    </div>
+  </div>
+
+  <!-- related -->
+  {%- assign related = product.collections.first.products | default: collections.all.products -%}
+  {%- if related.size > 1 -%}
+    <div style="margin-top:64px;">
+      <h2 class="tb-section-title" style="font-size:28px;margin-bottom:24px;">{{ 'products.product.related' | t }}</h2>
+      <div class="tb-grid">
+        {%- assign shown = 0 -%}
+        {%- for rp in related -%}
+          {%- if rp.id != product.id and shown < 4 -%}
+            {%- render 'product-card', card_product: rp -%}
+            {%- assign shown = shown | plus: 1 -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Product",
+  "tag": "section",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Product", "info": "Leave default on product templates." }
+  ]
+}
+{% endschema %}

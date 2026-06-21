@@ -1,0 +1,129 @@
+{
+  "general": {
+    "accessibility": {
+      "skip_to_content": "Skip to content",
+      "close": "Close",
+      "previous": "Previous",
+      "next": "Next",
+      "cart": "Cart",
+      "search": "Search"
+    },
+    "password": {
+      "title": "Opening soon",
+      "text": "Enter the store password to continue.",
+      "placeholder": "Password",
+      "submit": "Enter"
+    },
+    "search": {
+      "title": "Search",
+      "placeholder": "Search products…",
+      "no_results": "No results found",
+      "trending": "Trending:",
+      "submit": "Search",
+      "results_for": "Results for \"{{ terms }}\""
+    },
+    "spin": {
+      "spin": "SPIN",
+      "spinning": "Spinning…",
+      "your_code": "Your code",
+      "copy": "Copy code",
+      "copied": "Copied!",
+      "congrats": "Congratulations! 🎉",
+      "congrats_sub": "Your code has been copied — apply it at checkout.",
+      "try_again": "So close! Better luck next time.",
+      "close": "Close"
+    },
+    "cart": {
+      "title": "Your cart",
+      "items_count": "{{ count }} items",
+      "empty": "Your cart is empty",
+      "start": "Start shopping",
+      "subtotal": "Subtotal",
+      "shipping": "Shipping",
+      "total": "Total",
+      "checkout": "Checkout",
+      "secure": "Secure, fully-encrypted payment",
+      "free": "Free",
+      "added": "Added to cart",
+      "remove": "Remove",
+      "ship_progress": "Add {{ amount }} for free shipping",
+      "ship_unlocked": "🎉 You unlocked free shipping!",
+      "taxes_note": "Taxes and shipping calculated at checkout",
+      "discount_placeholder": "Discount code",
+      "discount_apply": "Apply",
+      "discount_applied": "Will be applied at checkout"
+    },
+    "404": {
+      "title": "Page not found",
+      "text": "The page you are looking for does not exist.",
+      "home": "Back to home"
+    },
+    "newsletter": {
+      "success": "Thanks for subscribing.",
+      "placeholder": "Email address",
+      "submit": "Subscribe"
+    },
+    "countdown": { "days": "Days", "hours": "Hrs", "mins": "Min", "secs": "Sec" },
+    "pagination": { "previous": "Previous", "next": "Next" }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Add to cart",
+      "sold_out": "Sold out",
+      "unavailable": "Unavailable",
+      "in_stock": "In stock",
+      "low_stock": "Low stock",
+      "quantity": "Quantity",
+      "color": "Color",
+      "specifications": "Specifications",
+      "related": "You may also like",
+      "reviews": "reviews",
+      "save": "Save {{ amount }}",
+      "buy_now": "Buy now",
+      "view_details": "View details",
+      "on_sale": "SALE",
+      "new": "NEW",
+      "from": "From {{ price }}"
+    }
+  },
+  "collections": {
+    "general": {
+      "all_products": "All products",
+      "products_count": "{{ count }} products",
+      "sort_by": "Sort by",
+      "featured": "Featured",
+      "best_selling": "Best selling",
+      "price_low": "Price: low to high",
+      "price_high": "Price: high to low",
+      "newest": "Newest",
+      "top_rated": "Top rated",
+      "empty": "No products found",
+      "view_all": "View all",
+      "explore": "Explore"
+    }
+  },
+  "blogs": {
+    "article": {
+      "read_more": "Read more",
+      "by": "By {{ author }}",
+      "back": "Back to blog",
+      "comments": "Comments"
+    }
+  },
+  "contact": {
+    "form": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "message": "Message",
+      "submit": "Send message",
+      "success": "Thanks — your message has been sent. We'll get back to you soon."
+    }
+  },
+  "customer": {
+    "account": { "title": "Account", "details": "Account details", "orders": "Orders", "logout": "Log out" },
+    "login": { "title": "Log in", "email": "Email", "password": "Password", "submit": "Sign in", "create": "Create account", "forgot": "Forgot password?" },
+    "register": { "title": "Create account", "first_name": "First name", "last_name": "Last name", "submit": "Create" },
+    "orders": { "none": "You haven't placed any orders yet." }
+  }
+}

@@ -1,0 +1,62 @@
+{%- paginate collection.products by 16 -%}
+<section class="wrap" style="padding-block:40px 80px;">
+  <nav class="tb-crumb"><a href="{{ routes.root_url }}">{{ shop.name }}</a> / <b>{{ collection.title }}</b></nav>
+  <h1 class="tb-page__title" style="margin-bottom:6px;">{{ collection.title }}</h1>
+  {%- if collection.description != blank -%}
+    <div class="rte" style="margin-bottom:6px;">{{ collection.description }}</div>
+  {%- endif -%}
+
+  <div class="tb-toolbar">
+    {%- if section.settings.show_collection_chips -%}
+      <div class="tb-chips">
+        <a class="tb-chip {% if collection.handle == 'all' or template.suffix == blank and collection.all_products_count == collection.products_count and collection.current_type == blank %}{% endif %}" href="{{ routes.all_products_collection_url }}"{% if collection.handle == 'all' %} aria-current="page"{% endif %}>{{ 'collections.general.all_products' | t }}</a>
+        {%- for c in collections limit: 6 -%}
+          {%- unless c.handle == 'all' or c.products_count == 0 -%}
+            <a class="tb-chip" href="{{ c.url }}"{% if c.id == collection.id %} aria-current="page"{% endif %}>{{ c.title }}</a>
+          {%- endunless -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+    <div style="flex:1"></div>
+    <span class="tb-count">{{ 'collections.general.products_count' | t: count: collection.products_count }}</span>
+    <form>
+      <select name="sort_by" class="tb-select" onchange="this.form.submit()" aria-label="{{ 'collections.general.sort_by' | t }}">
+        {%- assign current = collection.sort_by | default: collection.default_sort_by -%}
+        {%- for opt in collection.sort_options -%}
+          <option value="{{ opt.value }}"{% if opt.value == current %} selected{% endif %}>{{ opt.name }}</option>
+        {%- endfor -%}
+      </select>
+    </form>
+  </div>
+
+  {%- if collection.products.size > 0 -%}
+    <div class="tb-grid">
+      {%- for product in collection.products -%}
+        {%- render 'product-card', card_product: product -%}
+      {%- endfor -%}
+    </div>
+
+    {%- if paginate.pages > 1 -%}
+      <div style="display:flex;gap:8px;justify-content:center;margin-top:40px;">
+        {%- if paginate.previous -%}<a class="tb-btn tb-btn--ghost" href="{{ paginate.previous.url }}">{{ 'general.pagination.previous' | t }}</a>{%- endif -%}
+        {%- for part in paginate.parts -%}
+          {%- if part.is_link -%}<a class="tb-btn tb-btn--ghost" style="min-width:48px;padding:0 14px;" href="{{ part.url }}">{{ part.title }}</a>
+          {%- else -%}<span class="tb-btn" style="min-width:48px;padding:0 14px;border-color:var(--accent);">{{ part.title }}</span>{%- endif -%}
+        {%- endfor -%}
+        {%- if paginate.next -%}<a class="tb-btn tb-btn--ghost" href="{{ paginate.next.url }}">{{ 'general.pagination.next' | t }}</a>{%- endif -%}
+      </div>
+    {%- endif -%}
+  {%- else -%}
+    <div class="tb-search__empty" style="border:1px solid var(--line);border-radius:18px;">{{ 'collections.general.empty' | t }}</div>
+  {%- endif -%}
+</section>
+{%- endpaginate -%}
+
+{% schema %}
+{
+  "name": "Product grid",
+  "settings": [
+    { "type": "checkbox", "id": "show_collection_chips", "label": "Show collection filter chips", "default": true }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,652 @@
+{%- comment -%}
+  Glass Mosaic Banner (Three.js WebGL Edition - V20 Multi-Instance Support)
+  Sibling layout of the Glass Hero Banner: re-arranged crystalline shard
+  composition with varied sizes + a warm-earthy reflection environment.
+  Each instance is fully isolated using section.id scoping for IDs,
+  variables, and event listeners. Multiple banners can coexist on one page.
+{%- endcomment -%}
+
+<style>
+  body, html { margin: 0; padding: 0; overflow-x: hidden; }
+  .gm20-root {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    min-height: 600px;
+    background: #140f0a;
+    overflow: hidden;
+    z-index: 0;
+  }
+  .gm20-canvas {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+    cursor: crosshair;
+  }
+</style>
+
+<div class="gm20-root" id="gm20-root-{{ section.id }}">
+  <div class="gm20-canvas" id="gm20-canvas-{{ section.id }}"></div>
+</div>
+
+<script>
+  window['gm20_{{ section.id }}'] = {
+    unifiedMode: {{ section.settings.use_unified_image | json }},
+    unifiedImage: {% if section.settings.unified_image %}{ 
+      url: {{ section.settings.unified_image | image_url: width: 2000 | json }}, 
+      aspect: {{ section.settings.unified_image.aspect_ratio | json }},
+      link: {{ section.settings.unified_url | json }}
+    }{% else %}null{% endif %},
+    unifiedImageMobile: {% if section.settings.unified_image_mobile %}{ 
+      url: {{ section.settings.unified_image_mobile | image_url: width: 1024 | json }}, 
+      aspect: {{ section.settings.unified_image_mobile.aspect_ratio | json }},
+      link: {{ section.settings.unified_url_mobile | default: section.settings.unified_url | json }}
+    }{% else %}null{% endif %},
+    images: [
+      { 
+        url: {% if section.settings.image_1 %}{{ section.settings.image_1 | image_url: width: 1536 | json }}{% else %}null{% endif %}, 
+        urlMobile: {% if section.settings.image_1_mobile %}{{ section.settings.image_1_mobile | image_url: width: 1024 | json }}{% else %}null{% endif %},
+        aspect: {{ section.settings.image_1.aspect_ratio | default: 1 | json }}, 
+        aspectMobile: {{ section.settings.image_1_mobile.aspect_ratio | default: 1 | json }},
+        link: {{ section.settings.url_1 | json }},
+        linkMobile: {{ section.settings.url_1_mobile | default: section.settings.url_1 | json }}
+      },
+      { 
+        url: {% if section.settings.image_2 %}{{ section.settings.image_2 | image_url: width: 1536 | json }}{% else %}null{% endif %}, 
+        urlMobile: {% if section.settings.image_2_mobile %}{{ section.settings.image_2_mobile | image_url: width: 1024 | json }}{% else %}null{% endif %},
+        aspect: {{ section.settings.image_2.aspect_ratio | default: 1 | json }}, 
+        aspectMobile: {{ section.settings.image_2_mobile.aspect_ratio | default: 1 | json }},
+        link: {{ section.settings.url_2 | json }},
+        linkMobile: {{ section.settings.url_2_mobile | default: section.settings.url_2 | json }}
+      },
+      { 
+        url: {% if section.settings.image_3 %}{{ section.settings.image_3 | image_url: width: 1536 | json }}{% else %}null{% endif %}, 
+        urlMobile: {% if section.settings.image_3_mobile %}{{ section.settings.image_3_mobile | image_url: width: 1024 | json }}{% else %}null{% endif %},
+        aspect: {{ section.settings.image_3.aspect_ratio | default: 1 | json }}, 
+        aspectMobile: {{ section.settings.image_3_mobile.aspect_ratio | default: 1 | json }},
+        link: {{ section.settings.url_3 | json }},
+        linkMobile: {{ section.settings.url_3_mobile | default: section.settings.url_3 | json }}
+      },
+      { 
+        url: {% if section.settings.image_4 %}{{ section.settings.image_4 | image_url: width: 1536 | json }}{% else %}null{% endif %}, 
+        urlMobile: {% if section.settings.image_4_mobile %}{{ section.settings.image_4_mobile | image_url: width: 1024 | json }}{% else %}null{% endif %},
+        aspect: {{ section.settings.image_4.aspect_ratio | default: 1 | json }}, 
+        aspectMobile: {{ section.settings.image_4_mobile.aspect_ratio | default: 1 | json }},
+        link: {{ section.settings.url_4 | json }},
+        linkMobile: {{ section.settings.url_4_mobile | default: section.settings.url_4 | json }}
+      },
+      { 
+        url: {% if section.settings.image_5 %}{{ section.settings.image_5 | image_url: width: 1536 | json }}{% else %}null{% endif %}, 
+        urlMobile: {% if section.settings.image_5_mobile %}{{ section.settings.image_5_mobile | image_url: width: 1024 | json }}{% else %}null{% endif %},
+        aspect: {{ section.settings.image_5.aspect_ratio | default: 1 | json }}, 
+        aspectMobile: {{ section.settings.image_5_mobile.aspect_ratio | default: 1 | json }},
+        link: {{ section.settings.url_5 | json }},
+        linkMobile: {{ section.settings.url_5_mobile | default: section.settings.url_5 | json }}
+      }
+    ]
+  };
+</script>
+
+<script type="module">
+  import * as THREE from 'https://esm.sh/three@0.164.0';
+
+  const SECTION_ID = '{{ section.id }}';
+  const sectionData = window['gm20_' + SECTION_ID];
+  const container = document.getElementById('gm20-canvas-' + SECTION_ID);
+  const rootEl = document.getElementById('gm20-root-' + SECTION_ID);
+
+  if(container && sectionData) {
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color('#161009');
+
+    const camera = new THREE.PerspectiveCamera(38, rootEl.offsetWidth / rootEl.offsetHeight, 0.1, 100);
+    camera.position.z = 21; 
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
+    renderer.setSize(rootEl.offsetWidth, rootEl.offsetHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.0; 
+    container.appendChild(renderer.domElement);
+
+    // -----------------------------------------------------------------------------------
+    // WARM-EARTHY SYMMETRIC REFLECTION MAP (TBEAST palette)
+    // -----------------------------------------------------------------------------------
+    function createSymmetricEnvRing() {
+        const cvs = document.createElement('canvas');
+        cvs.width = 1024; cvs.height = 1024;
+        const ctx = cvs.getContext('2d');
+        
+        ctx.fillStyle = '#0d0906'; 
+        ctx.fillRect(0,0,1024,1024);
+
+        const orbR = 320; 
+
+        // left orb — warm amber
+        const gL = ctx.createRadialGradient(150, 512, 0, 150, 512, orbR);
+        gL.addColorStop(0, 'rgba(238, 170, 96, 1.0)');
+        gL.addColorStop(1, 'transparent');
+        ctx.fillStyle = gL; ctx.beginPath(); ctx.arc(150, 512, orbR, 0, Math.PI*2); ctx.fill();
+
+        // right orb — terracotta / clay
+        const gR = ctx.createRadialGradient(874, 512, 0, 874, 512, orbR);
+        gR.addColorStop(0, 'rgba(206, 108, 64, 1.0)');
+        gR.addColorStop(1, 'transparent');
+        ctx.fillStyle = gR; ctx.beginPath(); ctx.arc(874, 512, orbR, 0, Math.PI*2); ctx.fill();
+
+        // top band — soft gold
+        const gT = ctx.createLinearGradient(0,0,0,250);
+        gT.addColorStop(0, 'rgba(224, 178, 116, 1.0)');
+        gT.addColorStop(1, 'transparent');
+        ctx.fillStyle = gT; ctx.fillRect(0,0,1024,250);
+
+        // bottom band — deep ember
+        const gB = ctx.createLinearGradient(0,1024,0,774);
+        gB.addColorStop(0, 'rgba(176, 78, 48, 1.0)');
+        gB.addColorStop(1, 'transparent');
+        ctx.fillStyle = gB; ctx.fillRect(0,774,1024,250);
+
+        const tex = new THREE.CanvasTexture(cvs);
+        tex.mapping = THREE.EquirectangularReflectionMapping;
+        return tex;
+    }
+    
+    scene.environment = createSymmetricEnvRing();
+
+    // -----------------------------------------------------------------------------------
+    // MAT & GEO
+    // -----------------------------------------------------------------------------------
+    const glassMat = new THREE.MeshPhysicalMaterial({
+        color: 0xffffff,
+        metalness: 0.1,
+        roughness: {{ section.settings.glass_roughness | default: 0.00 | json }},          
+        transmission: 1.0,        
+        ior: {{ section.settings.glass_ior | default: 1.15 | json }},                
+        dispersion: {{ section.settings.glass_dispersion | default: 0.05 | json }},          
+        thickness: {{ section.settings.glass_thickness | default: 0.1 | json }},           
+        clearcoat: 1.0,           
+        clearcoatRoughness: 0.05, 
+        iridescence: {{ section.settings.glass_iridescence | default: 0.2 | json }},         
+        iridescenceIOR: 2.1,
+        iridescenceThicknessRange: [100, 400],
+        envMapIntensity: 2.5,     
+        transparent: true,
+        side: THREE.DoubleSide
+    });
+
+    function createRoundedShape(localPts, radius) {
+        const shape = new THREE.Shape();
+        const len = localPts.length;
+        for (let i = 0; i < len; i++) {
+            const p0 = localPts[(i - 1 + len) % len];
+            const p1 = localPts[i];
+            const p2 = localPts[(i + 1) % len];
+            
+            const v1 = [p0[0] - p1[0], p0[1] - p1[1]];
+            const v2 = [p2[0] - p1[0], p2[1] - p1[1]];
+            const l1 = Math.sqrt(v1[0]*v1[0] + v1[1]*v1[1]);
+            const l2 = Math.sqrt(v2[0]*v2[0] + v2[1]*v2[1]);
+            
+            const n1 = [v1[0]/l1, v1[1]/l1];
+            const n2 = [v2[0]/l2, v2[1]/l2];
+            
+            const r = Math.min(radius, l1/2.1, l2/2.1); 
+            
+            const startPt = [p1[0] + n1[0]*r, p1[1] + n1[1]*r];
+            const endPt   = [p1[0] + n2[0]*r, p1[1] + n2[1]*r];
+            
+            if (i === 0) shape.moveTo(startPt[0], startPt[1]);
+            else shape.lineTo(startPt[0], startPt[1]);
+            
+            shape.quadraticCurveTo(p1[0], p1[1], endPt[0], endPt[1]);
+        }
+        return shape;
+    }
+
+    function createShardGeo(pts) {
+        let cx = 0, cy = 0;
+        pts.forEach(p => { cx += p[0]; cy += p[1]; });
+        cx /= pts.length;
+        cy /= pts.length;
+        
+        const insetAmount = 0.12; 
+        const localPts = pts.map(p => {
+            const lx = p[0] - cx;
+            const ly = p[1] - cy;
+            let dirX = -lx;
+            let dirY = -ly;
+            let len = Math.sqrt(dirX*dirX + dirY*dirY);
+            if(len === 0) return [lx, ly];
+            return [lx + (dirX/len) * insetAmount, ly + (dirY/len) * insetAmount];
+        });
+
+        const shape = createRoundedShape(localPts, 0.4);
+
+        const geo = new THREE.ExtrudeGeometry(shape, {
+            depth: 0.35,
+            bevelEnabled: true,
+            bevelSegments: 5,
+            bevelSize: 0.1,
+            bevelThickness: 0.12
+        });
+        
+        geo.computeVertexNormals();
+
+        return { geo, cx, cy, shape };
+    }
+
+    // -----------------------------------------------------------------------------------
+    // SHATTERED CRYSTAL LAYOUT — irregular angular shards (no rectangles)
+    // Desktop bounds: x[-14..14], y[-6..6]
+    // -----------------------------------------------------------------------------------
+    const rawShards = [
+      [[-14, 6], [-3, 6], [1, 1], [-6, -1], [-14, -2]],            // top-left pentagon
+      [[-3, 6], [14, 6], [14, 1], [6, 2], [1, 1]],                 // top-right wedge
+      [[6, 2], [14, 1], [14, -6], [5, -6], [2, -2]],               // right shard
+      [[1, 1], [6, 2], [2, -2], [-2, -2], [-6, -1]],              // center pentagon (closes gap)
+      [[-14, -2], [-6, -1], [-2, -2], [2, -2], [5, -6], [-14, -6]] // bottom sweep
+    ];
+
+    // Mobile bounds: x[-7..7], y[-12..12]
+    const mobileShards = [
+      [[-7, 12], [7, 12], [7, 6], [1, 4], [-7, 7]],                // top crystal
+      [[-7, 7], [1, 4], [3, -1], [-3, 0], [-7, 1]],                // upper-left
+      [[1, 4], [7, 6], [7, -2], [3, -1]],                          // upper-right
+      [[-7, 1], [-3, 0], [3, -1], [7, -2], [7, -7], [-2, -6], [-7, -5]], // mid sweep
+      [[-7, -5], [-2, -6], [7, -7], [7, -12], [-7, -12]]           // bottom
+    ];
+
+    const desktopGroup = new THREE.Group();
+    const mobileGroup = new THREE.Group();
+    scene.add(desktopGroup);
+    scene.add(mobileGroup);
+
+    const textureLoader = new THREE.TextureLoader();
+    
+    // Unified Textures (Desktop & Mobile)
+    let unifiedTexData = null;
+    let unifiedTexDataMobile = null;
+    
+    if (sectionData.unifiedMode) {
+        if (sectionData.unifiedImage) {
+            const tex = textureLoader.load(sectionData.unifiedImage.url);
+            tex.colorSpace = THREE.SRGBColorSpace;
+            tex.center.set(0.5, 0.5);
+            unifiedTexData = { tex, aspect: sectionData.unifiedImage.aspect, link: sectionData.unifiedImage.link };
+        }
+        
+        if (sectionData.unifiedImageMobile || sectionData.unifiedImage) {
+            const imgTarget = sectionData.unifiedImageMobile || sectionData.unifiedImage;
+            const tex = textureLoader.load(imgTarget.url);
+            tex.colorSpace = THREE.SRGBColorSpace;
+            tex.center.set(0.5, 0.5);
+            unifiedTexDataMobile = { tex, aspect: imgTarget.aspect, link: imgTarget.link };
+        }
+    }
+
+    const loadedTextures = (sectionData.images || []).map(imgData => {
+        if (!imgData.url) return null;
+        const tex = textureLoader.load(imgData.url);
+        tex.colorSpace = THREE.SRGBColorSpace;
+        tex.center.set(0.5, 0.5);
+        return { tex, aspect: imgData.aspect, link: imgData.link };
+    });
+
+    const loadedTexturesMobile = (sectionData.images || []).map(imgData => {
+        const url = imgData.urlMobile || imgData.url;
+        if (!url) return null;
+        const tex = textureLoader.load(url);
+        tex.colorSpace = THREE.SRGBColorSpace;
+        tex.center.set(0.5, 0.5);
+        return { tex, aspect: imgData.aspectMobile || imgData.aspect, link: imgData.linkMobile || imgData.link };
+    });
+
+    function applyBoundingBoxUVs(geometry) {
+        geometry.computeBoundingBox();
+        const bbox = geometry.boundingBox;
+        const width = bbox.max.x - bbox.min.x;
+        const height = bbox.max.y - bbox.min.y;
+        
+        const posAttribute = geometry.attributes.position;
+        const uvAttribute = geometry.attributes.uv;
+        
+        for (let i = 0; i < posAttribute.count; i++) {
+            const x = posAttribute.getX(i);
+            const y = posAttribute.getY(i);
+            const u = (x - bbox.min.x) / width;
+            const v = (y - bbox.min.y) / height;
+            uvAttribute.setXY(i, u, v);
+        }
+    }
+
+    function applyUnifiedUVs(geometry, offsetPos, totalMode) {
+        const tW = totalMode === 'desktop' ? 28 : 14;
+        const tH = totalMode === 'desktop' ? 12 : 24;
+        const layoutAspect = tW / tH;
+        
+        const imgAspect = unifiedTexData.aspect;
+        let scaleU = 1, scaleV = 1;
+        let offU = 0, offV = 0;
+
+        if (imgAspect > layoutAspect) {
+            scaleU = layoutAspect / imgAspect;
+            offU = (1 - scaleU) / 2;
+        } else {
+            scaleV = imgAspect / layoutAspect;
+            offV = (1 - scaleV) / 2;
+        }
+
+        const posAttribute = geometry.attributes.position;
+        const uvAttribute = geometry.attributes.uv;
+        
+        for (let i = 0; i < posAttribute.count; i++) {
+            const worldX = posAttribute.getX(i) + offsetPos.x;
+            const worldY = posAttribute.getY(i) + offsetPos.y;
+            
+            let u = (worldX + tW/2) / tW;
+            let v = (worldY + tH/2) / tH;
+            
+            u = u * scaleU + offU;
+            v = v * scaleV + offV;
+            
+            uvAttribute.setXY(i, u, v);
+        }
+    }
+
+    function createCoverMaterial(imgData, shapeGeo) {
+        shapeGeo.computeBoundingBox();
+        const bbox = shapeGeo.boundingBox;
+        const shapeW = bbox.max.x - bbox.min.x;
+        const shapeH = bbox.max.y - bbox.min.y;
+        const shapeAspect = shapeW / shapeH;
+        
+        const tex = imgData.tex.clone();
+        tex.needsUpdate = true;
+        
+        if (imgData.aspect > shapeAspect) {
+            tex.repeat.set(shapeAspect / imgData.aspect, 1);
+        } else {
+            tex.repeat.set(1, imgData.aspect / shapeAspect);
+        }
+        
+        return new THREE.MeshBasicMaterial({ map: tex, transparent: false });
+    }
+
+    const desktopMeshes = [];
+    rawShards.forEach((pts, index) => {
+        const { geo, cx, cy, shape } = createShardGeo(pts);
+        const mesh = new THREE.Mesh(geo, glassMat);
+        
+        const isUnified = sectionData.unifiedMode && unifiedTexData;
+        if (isUnified || (loadedTextures[index] && loadedTextures[index].tex)) {
+            const shapeGeo = new THREE.ShapeGeometry(shape);
+            let imgMat;
+            
+            if (isUnified) {
+                applyUnifiedUVs(shapeGeo, { x: cx, y: cy }, 'desktop');
+                imgMat = new THREE.MeshBasicMaterial({ map: unifiedTexData.tex, transparent: false });
+                mesh.userData.link = unifiedTexData.link;
+            } else {
+                applyBoundingBoxUVs(shapeGeo);
+                imgMat = createCoverMaterial(loadedTextures[index], shapeGeo);
+                mesh.userData.link = loadedTextures[index].link;
+            }
+            
+            const imgMesh = new THREE.Mesh(shapeGeo, imgMat);
+            imgMesh.position.z = 0.05;
+            mesh.add(imgMesh);
+        }
+
+        mesh.position.set(cx, cy, 0); 
+        desktopGroup.add(mesh);
+        desktopMeshes.push(mesh);
+    });
+
+    const mobileMeshes = [];
+    mobileShards.forEach((pts, index) => {
+        const { geo, cx, cy, shape } = createShardGeo(pts);
+        const mesh = new THREE.Mesh(geo, glassMat);
+        
+        const isUnified = sectionData.unifiedMode && unifiedTexDataMobile;
+        if (isUnified || (loadedTexturesMobile[index] && loadedTexturesMobile[index].tex)) {
+            const shapeGeo = new THREE.ShapeGeometry(shape);
+            let imgMat;
+            
+            if (isUnified) {
+                applyUnifiedUVs(shapeGeo, { x: cx, y: cy }, 'mobile');
+                imgMat = new THREE.MeshBasicMaterial({ map: unifiedTexDataMobile.tex, transparent: false });
+                mesh.userData.link = unifiedTexDataMobile.link;
+            } else {
+                applyBoundingBoxUVs(shapeGeo);
+                imgMat = createCoverMaterial(loadedTexturesMobile[index], shapeGeo);
+                mesh.userData.link = loadedTexturesMobile[index].link;
+            }
+            
+            const imgMesh = new THREE.Mesh(shapeGeo, imgMat);
+            imgMesh.position.z = 0.05;
+            mesh.add(imgMesh);
+        }
+
+        mesh.position.set(cx, cy, 0); 
+        mobileGroup.add(mesh);
+        mobileMeshes.push(mesh);
+    });
+
+    let currentMeshes = desktopMeshes;
+
+    function updateLayoutAndScale() {
+        const w = rootEl.offsetWidth;
+        const h = rootEl.offsetHeight;
+        const aspect = w / h;
+        const isPortrait = aspect <= 1.05;
+
+        const visibleHeight = 14.4;
+        const visibleWidth = visibleHeight * aspect;
+
+        if (isPortrait) {
+            desktopGroup.visible = false;
+            mobileGroup.visible = true;
+            currentMeshes = mobileMeshes;
+            
+            const scaleWidth = (visibleWidth * 0.85) / 14;
+            const scaleHeight = (visibleHeight * 0.80) / 24;
+            
+            const mScale = Math.min(scaleWidth, scaleHeight, 0.9);
+            mobileGroup.scale.set(mScale, mScale, mScale);
+            mobileGroup.position.y = -0.8;
+        } else {
+            mobileGroup.visible = false;
+            desktopGroup.visible = true;
+            currentMeshes = desktopMeshes;
+            
+            let dScaleWidth = (visibleWidth * 0.9) / 28;
+            let dScaleHeight = (visibleHeight * 0.85) / 12;
+
+            const dScale = Math.min(dScaleWidth, dScaleHeight, 0.85);
+            desktopGroup.scale.set(dScale, dScale, dScale);
+            desktopGroup.position.y = -0.3;
+        }
+    }
+    updateLayoutAndScale();
+
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+    let targetTiltX = 0;
+    let targetTiltY = 0;
+
+    function handlePointerMove(clientX, clientY) {
+        const rect = rootEl.getBoundingClientRect();
+        mouse.x = ((clientX - rect.left) / rect.width) * 2 - 1;
+        mouse.y = -((clientY - rect.top) / rect.height) * 2 + 1;
+        
+        targetTiltX = mouse.y * 0.12;
+        targetTiltY = mouse.x * 0.12;
+        
+        scene.environmentRotation.y = mouse.x * 0.8; 
+        scene.environmentRotation.x = -mouse.y * 0.4;
+    }
+
+    rootEl.addEventListener('mousemove', (e) => {
+        handlePointerMove(e.clientX, e.clientY);
+        
+        raycaster.setFromCamera(mouse, camera);
+        const intersects = raycaster.intersectObjects(currentMeshes);
+        if (intersects.length > 0 && intersects[0].object.userData.link) {
+            container.style.cursor = 'pointer';
+        } else {
+            container.style.cursor = 'crosshair';
+        }
+    });
+
+    rootEl.addEventListener('click', () => {
+        raycaster.setFromCamera(mouse, camera);
+        const intersects = raycaster.intersectObjects(currentMeshes);
+        if (intersects.length > 0) {
+            const url = intersects[0].object.userData.link;
+            if (url) window.location.href = url;
+        }
+    });
+
+    rootEl.addEventListener('touchstart', (e) => {
+        if(e.touches.length > 0) {
+            handlePointerMove(e.touches[0].clientX, e.touches[0].clientY);
+        }
+    }, {passive: true});
+
+    rootEl.addEventListener('touchmove', (e) => {
+        if(e.touches.length > 0) {
+            handlePointerMove(e.touches[0].clientX, e.touches[0].clientY);
+        }
+    }, {passive: true});
+
+    window.addEventListener('resize', () => {
+        const w = rootEl.offsetWidth;
+        const h = rootEl.offsetHeight;
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+        renderer.setSize(w, h);
+        updateLayoutAndScale(); 
+    });
+
+    function animate() {
+        requestAnimationFrame(animate);
+        
+        const activeGroup = desktopGroup.visible ? desktopGroup : mobileGroup;
+        
+        activeGroup.rotation.x += (targetTiltX - activeGroup.rotation.x) * 0.05;
+        activeGroup.rotation.y += (targetTiltY - activeGroup.rotation.y) * 0.05;
+
+        raycaster.setFromCamera(mouse, camera);
+        const intersects = raycaster.intersectObjects(currentMeshes);
+        const hoveredMesh = intersects.length > 0 ? intersects[0].object : null;
+
+        currentMeshes.forEach(mesh => {
+            const isHovered = (mesh === hoveredMesh);
+            
+            const tZ = isHovered ? 1.0 : 0;
+            const tScale = isHovered ? 1.03 : 1.0;
+            
+            mesh.position.z += (tZ - mesh.position.z) * 0.12;
+            mesh.scale.x += (tScale - mesh.scale.x) * 0.12;
+            mesh.scale.y += (tScale - mesh.scale.y) * 0.12;
+            
+            if(isHovered) {
+                mesh.material.envMapIntensity = THREE.MathUtils.lerp(mesh.material.envMapIntensity, 3.5, 0.1);
+            } else {
+                mesh.material.envMapIntensity = THREE.MathUtils.lerp(mesh.material.envMapIntensity, 2.5, 0.05);
+            }
+        });
+
+        renderer.render(scene, camera);
+    }
+    
+    animate();
+  }
+
+</script>
+
+{% schema %}
+{
+  "name": "Glass Mosaic Banner (3D)",
+  "settings": [
+    { "type": "header", "content": "Unified Image Mode" },
+    { "type": "checkbox", "id": "use_unified_image", "label": "Use Unified Image", "default": false },
+    { "type": "image_picker", "id": "unified_image", "label": "Unified Image - Desktop (Landscape)" },
+    { "type": "image_picker", "id": "unified_image_mobile", "label": "Unified Image - Mobile (Portrait)" },
+    { "type": "url", "id": "unified_url", "label": "Unified Link URL - Desktop" },
+    { "type": "url", "id": "unified_url_mobile", "label": "Unified Link URL - Mobile" },
+    { "type": "header", "content": "Glass Material Optimization" },
+    {
+      "type": "range",
+      "id": "glass_thickness",
+      "min": 0,
+      "max": 2,
+      "step": 0.1,
+      "label": "Glass Thickness (Depth)",
+      "default": 0.1,
+      "info": "Lower values make the product image clearer."
+    },
+    {
+      "type": "range",
+      "id": "glass_roughness",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "label": "Glass Blur (Roughness)",
+      "default": 0,
+      "info": "0.0 is perfectly clear (FHD)."
+    },
+    {
+      "type": "range",
+      "id": "glass_ior",
+      "min": 1,
+      "max": 2,
+      "step": 0.1,
+      "label": "Refractive Index (Distortion)",
+      "default": 1.1,
+      "info": "1.0 is no distortion. 1.5 is real glass."
+    },
+    {
+      "type": "range",
+      "id": "glass_dispersion",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "label": "Chromatic Dispersion (Rainbow edges)",
+      "default": 0.1
+    },
+    {
+      "type": "range",
+      "id": "glass_iridescence",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "label": "Iridescence intensity",
+      "default": 0.2
+    },
+    { "type": "header", "content": "Individual Glass Images" },
+    { "type": "paragraph", "content": "Only works if 'Use Unified Image' is OFF." },
+    { "type": "image_picker", "id": "image_1", "label": "Image 1 - Desktop" },
+    { "type": "image_picker", "id": "image_1_mobile", "label": "Image 1 - Mobile" },
+    { "type": "url", "id": "url_1", "label": "Link 1 - Desktop" },
+    { "type": "url", "id": "url_1_mobile", "label": "Link 1 - Mobile" },
+    { "type": "image_picker", "id": "image_2", "label": "Image 2 - Desktop" },
+    { "type": "image_picker", "id": "image_2_mobile", "label": "Image 2 - Mobile" },
+    { "type": "url", "id": "url_2", "label": "Link 2 - Desktop" },
+    { "type": "url", "id": "url_2_mobile", "label": "Link 2 - Mobile" },
+    { "type": "image_picker", "id": "image_3", "label": "Image 3 - Desktop" },
+    { "type": "image_picker", "id": "image_3_mobile", "label": "Image 3 - Mobile" },
+    { "type": "url", "id": "url_3", "label": "Link 3 - Desktop" },
+    { "type": "url", "id": "url_3_mobile", "label": "Link 3 - Mobile" },
+    { "type": "image_picker", "id": "image_4", "label": "Image 4 - Desktop" },
+    { "type": "image_picker", "id": "image_4_mobile", "label": "Image 4 - Mobile" },
+    { "type": "url", "id": "url_4", "label": "Link 4 - Desktop" },
+    { "type": "url", "id": "url_4_mobile", "label": "Link 4 - Mobile" },
+    { "type": "image_picker", "id": "image_5", "label": "Image 5 - Desktop" },
+    { "type": "image_picker", "id": "image_5_mobile", "label": "Image 5 - Mobile" },
+    { "type": "url", "id": "url_5", "label": "Link 5 - Desktop" },
+    { "type": "url", "id": "url_5_mobile", "label": "Link 5 - Mobile" }
+  ],
+  "presets": [{ "name": "Glass Mosaic Banner (3D WebGL)" }]
+}
+{% endschema %}

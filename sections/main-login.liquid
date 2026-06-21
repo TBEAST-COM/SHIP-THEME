@@ -1,0 +1,32 @@
+<section class="wrap tb-page" style="max-width:440px;">
+  <div id="tb-login">
+    <h1 class="tb-page__title" style="text-align:center;font-size:32px;">{{ 'customer.login.title' | t }}</h1>
+    {%- form 'customer_login' -%}
+      {%- if form.errors -%}<p style="color:var(--sale);margin-bottom:14px;">{{ form.errors | default_errors }}</p>{%- endif -%}
+      <label class="tb-card__sub" for="ce">{{ 'customer.login.email' | t }}</label>
+      <input class="tb-input" style="width:100%;margin:6px 0 16px;" type="email" name="customer[email]" id="ce" autocomplete="email" required>
+      <label class="tb-card__sub" for="cp">{{ 'customer.login.password' | t }}</label>
+      <input class="tb-input" style="width:100%;margin:6px 0 8px;" type="password" name="customer[password]" id="cp" autocomplete="current-password">
+      <a href="#tb-recover" style="font-size:13px;color:var(--accent-2);">{{ 'customer.login.forgot' | t }}</a>
+      <button type="submit" class="tb-btn tb-btn--primary tb-btn--block" style="margin-top:20px;">{{ 'customer.login.submit' | t }}</button>
+    {%- endform -%}
+    <p style="text-align:center;margin-top:18px;color:var(--muted);font-size:14px;">
+      <a href="{{ routes.account_register_url }}" style="color:var(--accent-2);">{{ 'customer.login.create' | t }}</a>
+    </p>
+  </div>
+
+  <div id="tb-recover" style="margin-top:50px;border-top:1px solid var(--line);padding-top:30px;">
+    {%- form 'recover_customer_password' -%}
+      <h2 style="font-family:var(--display);font-size:20px;margin:0 0 14px;">{{ 'customer.login.forgot' | t }}</h2>
+      {%- if form.posted_successfully? -%}<p style="color:var(--ok);">{{ 'customer.recover_password.success' | t | default: 'Check your email.' }}</p>{%- endif -%}
+      <div style="display:flex;gap:10px;">
+        <input class="tb-input" style="flex:1;" type="email" name="email" placeholder="{{ 'customer.login.email' | t }}" required>
+        <button type="submit" class="tb-btn">{{ 'customer.login.submit' | t }}</button>
+      </div>
+    {%- endform -%}
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Login", "settings": [] }
+{% endschema %}

@@ -1,0 +1,15 @@
+<section class="wrap tb-page" style="max-width:420px;">
+  <h1 class="tb-page__title" style="text-align:center;font-size:30px;">{{ 'customer.activate_account.title' | t | default: 'Activate account' }}</h1>
+  {%- form 'activate_customer_password' -%}
+    {%- if form.errors -%}<p style="color:var(--sale);margin-bottom:14px;">{{ form.errors | default_errors }}</p>{%- endif -%}
+    <label class="tb-card__sub">{{ 'customer.login.password' | t }}</label>
+    <input class="tb-input" style="width:100%;margin:6px 0 16px;" type="password" name="customer[password]" autocomplete="new-password">
+    <label class="tb-card__sub">{{ 'customer.activate_account.password_confirm' | t | default: 'Confirm password' }}</label>
+    <input class="tb-input" style="width:100%;margin:6px 0 16px;" type="password" name="customer[password_confirmation]" autocomplete="new-password">
+    <button type="submit" class="tb-btn tb-btn--primary tb-btn--block">{{ 'customer.activate_account.submit' | t | default: 'Activate' }}</button>
+  {%- endform -%}
+</section>
+
+{% schema %}
+{ "name": "Activate account", "settings": [] }
+{% endschema %}

@@ -1,0 +1,28 @@
+<!doctype html>
+{% layout none %}
+<html lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ shop.name }} — {{ 'gift_cards.issued.title' | t | default: 'Gift card' }}</title>
+  {{ content_for_header }}
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  {{ 'base.css' | asset_url | stylesheet_tag }}
+</head>
+<body style="display:grid;place-items:center;min-height:100vh;padding:40px;">
+  <div style="max-width:420px;width:100%;text-align:center;">
+    <div class="tb-logo" style="justify-content:center;margin-bottom:24px;">
+      <span class="tb-logo__mark">T</span><span class="tb-logo__name">{{ shop.name }}</span>
+    </div>
+    <div style="border:1px solid var(--line);border-radius:24px;padding:34px;background:linear-gradient(150deg,oklch(0.30 0.04 50),oklch(0.20 0.02 58));position:relative;overflow:hidden;">
+      <div class="tb-kicker" style="color:var(--accent-2);">Gift card</div>
+      <div style="font-family:var(--display);font-weight:700;font-size:48px;margin:14px 0;">{{ gift_card.balance | money }}</div>
+      {%- if gift_card.qr_identifier -%}
+        <img src="{{ gift_card | qr_for_gift_card_url }}" alt="QR" style="width:140px;margin:10px auto;background:#fff;border-radius:12px;padding:8px;">
+      {%- endif -%}
+      <div class="mono" style="font-size:15px;letter-spacing:.12em;color:var(--text);margin-top:10px;">{{ gift_card.code | format_code }}</div>
+    </div>
+    <a class="tb-btn tb-btn--primary" href="{{ shop.url }}" style="margin-top:24px;">{{ 'gift_cards.issued.shop_link' | t | default: 'Start shopping' }}</a>
+  </div>
+</body>
+</html>

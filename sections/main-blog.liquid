@@ -1,0 +1,32 @@
+{%- paginate blog.articles by 12 -%}
+<section class="wrap tb-page">
+  <h1 class="tb-page__title">{{ blog.title }}</h1>
+  <div class="tb-grid">
+    {%- for article in blog.articles -%}
+      <a class="tb-card" href="{{ article.url }}">
+        <div class="tb-card__media">
+          {%- if article.image -%}<img class="tb-card__img--front" src="{{ article.image | image_url: width: 600 }}" alt="{{ article.image.alt | escape }}" loading="lazy">
+          {%- else -%}<span class="tb-visual"><span class="tb-visual__orb"></span></span>{%- endif -%}
+        </div>
+        <div class="tb-card__body">
+          <div class="tb-card__sub">{{ article.published_at | date: '%b %d, %Y' }}</div>
+          <div class="tb-card__name" style="margin-top:6px;">{{ article.title }}</div>
+          {%- if article.excerpt_or_content != blank -%}
+            <p style="color:var(--muted);font-size:13.5px;line-height:1.55;margin-top:8px;">{{ article.excerpt_or_content | strip_html | truncatewords: 18 }}</p>
+          {%- endif -%}
+        </div>
+      </a>
+    {%- endfor -%}
+  </div>
+  {%- if paginate.pages > 1 -%}
+    <div style="display:flex;gap:8px;justify-content:center;margin-top:40px;">
+      {%- if paginate.previous -%}<a class="tb-btn tb-btn--ghost" href="{{ paginate.previous.url }}">{{ 'general.pagination.previous' | t }}</a>{%- endif -%}
+      {%- if paginate.next -%}<a class="tb-btn tb-btn--ghost" href="{{ paginate.next.url }}">{{ 'general.pagination.next' | t }}</a>{%- endif -%}
+    </div>
+  {%- endif -%}
+</section>
+{%- endpaginate -%}
+
+{% schema %}
+{ "name": "Blog", "settings": [] }
+{% endschema %}

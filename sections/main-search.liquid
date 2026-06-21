@@ -1,0 +1,43 @@
+{%- paginate search.results by 16 -%}
+<section class="wrap tb-page">
+  <h1 class="tb-page__title" style="margin-bottom:8px;">{{ 'general.search.title' | t }}</h1>
+
+  <form action="{{ routes.search_url }}" method="get" role="search" style="max-width:560px;margin-bottom:30px;">
+    <div class="tb-search__field" style="border:1px solid var(--line);border-radius:14px;background:var(--surface);">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-2)" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'general.search.placeholder' | t }}" aria-label="{{ 'general.search.title' | t }}">
+      <button type="submit" class="tb-btn tb-btn--primary" style="height:40px;">{{ 'general.search.submit' | t }}</button>
+    </div>
+  </form>
+
+  {%- if search.performed -%}
+    <p class="tb-count" style="margin-bottom:20px;">{{ 'general.search.results_for' | t: terms: search.terms }} — {{ search.results_count }}</p>
+    {%- if search.results.size > 0 -%}
+      <div class="tb-grid">
+        {%- for item in search.results -%}
+          {%- if item.object_type == 'product' -%}
+            {%- render 'product-card', card_product: item -%}
+          {%- else -%}
+            <a class="tb-card" href="{{ item.url }}" style="padding:20px;">
+              <div class="tb-card__sub">{{ item.object_type }}</div>
+              <div class="tb-card__name" style="margin-top:8px;">{{ item.title }}</div>
+            </a>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+      {%- if paginate.pages > 1 -%}
+        <div style="display:flex;gap:8px;justify-content:center;margin-top:40px;">
+          {%- if paginate.previous -%}<a class="tb-btn tb-btn--ghost" href="{{ paginate.previous.url }}">{{ 'general.pagination.previous' | t }}</a>{%- endif -%}
+          {%- if paginate.next -%}<a class="tb-btn tb-btn--ghost" href="{{ paginate.next.url }}">{{ 'general.pagination.next' | t }}</a>{%- endif -%}
+        </div>
+      {%- endif -%}
+    {%- else -%}
+      <div class="tb-search__empty" style="border:1px solid var(--line);border-radius:18px;">{{ 'general.search.no_results' | t }}</div>
+    {%- endif -%}
+  {%- endif -%}
+</section>
+{%- endpaginate -%}
+
+{% schema %}
+{ "name": "Search", "settings": [] }
+{% endschema %}

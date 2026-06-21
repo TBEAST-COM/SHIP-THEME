@@ -1,0 +1,100 @@
+{%- comment -%} Lookbook hotspots — lifestyle image with clickable product spots, TBEAST identity {%- endcomment -%}
+{%- assign s = section.settings -%}
+{%- style -%}
+  #fxlb-{{ section.id }}{ padding-block:{{ s.pad | default: 72 }}px; position:relative; z-index:1; }
+  #fxlb-{{ section.id }} .fxlb-head{ max-width:1200px; margin:0 auto 30px; text-align:center; }
+  #fxlb-{{ section.id }} .fxlb-title{ font-family:var(--display); font-weight:700; font-size:clamp(30px,4.5vw,52px); color:var(--text); line-height:1.05; letter-spacing:-0.01em; margin:10px 0 0; }
+  #fxlb-{{ section.id }} .fxlb-wrap{ position:relative; max-width:{{ s.max_w | default: 1100 }}px; margin:0 auto; border-radius:var(--radius); overflow:hidden; border:1px solid var(--line); background:var(--card); }
+  #fxlb-{{ section.id }} .fxlb-img{ width:100%; display:block; }
+  #fxlb-{{ section.id }} .fxlb-ph{ width:100%; aspect-ratio:16/9; background:var(--bg-2); display:flex; align-items:center; justify-content:center; color:var(--muted); font-family:var(--display); font-weight:700; font-size:38px; letter-spacing:3px; }
+  #fxlb-{{ section.id }} .fxlb-spot{ position:absolute; width:32px; height:32px; transform:translate(-50%,-50%); z-index:3; cursor:pointer; }
+  #fxlb-{{ section.id }} .fxlb-dot{ position:absolute; inset:0; border-radius:50%; background:linear-gradient(135deg,var(--sale),var(--accent)); border:2px solid #fff; box-shadow:0 0 0 0 oklch(0.72 0.14 55 / 0.5); animation:fxlb-pulse-{{ section.id }} 2.2s infinite; transition:background .25s; }
+  @keyframes fxlb-pulse-{{ section.id }}{ 0%{ box-shadow:0 0 0 0 oklch(0.72 0.14 55 / 0.5);} 70%{ box-shadow:0 0 0 16px oklch(0.72 0.14 55 / 0);} 100%{ box-shadow:0 0 0 0 oklch(0.72 0.14 55 / 0);} }
+  #fxlb-{{ section.id }} .fxlb-dot::after{ content:'+'; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:var(--bg); font-weight:700; font-size:18px; transition:transform .25s,color .25s; }
+  #fxlb-{{ section.id }} .fxlb-pop{ position:absolute; left:50%; bottom:130%; transform:translateX(-50%) translateY(8px); width:248px; z-index:5; background:var(--bg-2); border:1px solid var(--line); border-radius:var(--radius-sm); padding:14px; opacity:0; visibility:hidden; transition:all .26s cubic-bezier(.2,.7,.2,1); box-shadow:0 18px 44px oklch(0 0 0 / 0.5); }
+  #fxlb-{{ section.id }} .fxlb-spot.open .fxlb-pop{ opacity:1; visibility:visible; transform:translateX(-50%) translateY(0); }
+  #fxlb-{{ section.id }} .fxlb-spot.open .fxlb-dot{ background:#fff; }
+  #fxlb-{{ section.id }} .fxlb-spot.open .fxlb-dot::after{ color:var(--accent); transform:rotate(45deg); }
+  #fxlb-{{ section.id }} .fxlb-pop-row{ display:flex; gap:11px; align-items:center; }
+  #fxlb-{{ section.id }} .fxlb-pop-thumb{ width:54px; height:54px; flex-shrink:0; border-radius:10px; object-fit:cover; background:var(--surface); border:1px solid var(--line); }
+  #fxlb-{{ section.id }} .fxlb-pop-name{ font-size:13.5px; font-weight:600; color:var(--text); margin-bottom:4px; text-align:start; font-family:var(--display); }
+  #fxlb-{{ section.id }} .fxlb-pop-price{ font-family:var(--mono); font-size:14px; font-weight:600; color:var(--accent-2); }
+  #fxlb-{{ section.id }} .fxlb-pop-btn{ display:block; text-align:center; margin-top:12px; background:linear-gradient(135deg,var(--sale),var(--accent)); color:var(--bg); font-family:var(--mono); font-size:10px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; padding:10px; border-radius:9px; transition:.2s; }
+  #fxlb-{{ section.id }} .fxlb-pop-btn:hover{ filter:brightness(1.06); }
+{%- endstyle -%}
+
+<section id="fxlb-{{ section.id }}" class="wrap tb-reveal" {{ section.shopify_attributes }}>
+  {%- if s.kicker != blank or s.title != blank -%}
+  <div class="fxlb-head">
+    {%- if s.kicker != blank -%}<div class="tb-kicker">{{ s.kicker }}</div>{%- endif -%}
+    {%- if s.title != blank -%}<h2 class="fxlb-title">{{ s.title }}</h2>{%- endif -%}
+  </div>
+  {%- endif -%}
+  <div class="fxlb-wrap" data-lb>
+    {%- if s.image != blank -%}
+      <img class="fxlb-img" src="{{ s.image | image_url: width: 1800 }}" alt="{{ s.title | escape }}">
+    {%- else -%}<div class="fxlb-ph">LOOKBOOK</div>{%- endif -%}
+    {%- for block in section.blocks -%}
+      <div class="fxlb-spot" data-spot style="left:{{ block.settings.x }}%; top:{{ block.settings.y }}%" {{ block.shopify_attributes }}>
+        <span class="fxlb-dot"></span>
+        <div class="fxlb-pop">
+          <div class="fxlb-pop-row">
+            {%- if block.settings.thumb != blank -%}<img class="fxlb-pop-thumb" src="{{ block.settings.thumb | image_url: width: 120 }}" alt="{{ block.settings.name | escape }}">{%- endif -%}
+            <div>
+              {%- if block.settings.name != blank -%}<div class="fxlb-pop-name">{{ block.settings.name }}</div>{%- endif -%}
+              {%- if block.settings.price != blank -%}<div class="fxlb-pop-price">{{ block.settings.price }}</div>{%- endif -%}
+            </div>
+          </div>
+          {%- if block.settings.link != blank -%}<a class="fxlb-pop-btn" href="{{ block.settings.link }}">{{ block.settings.btn_label | default: 'VIEW' }}</a>{%- endif -%}
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+</section>
+
+<script>
+(function(){
+  var root=document.getElementById('fxlb-{{ section.id }}');
+  if(!root) return;
+  var spots=[].slice.call(root.querySelectorAll('[data-spot]'));
+  spots.forEach(function(sp){
+    var dot=sp.querySelector('.fxlb-dot');
+    dot.addEventListener('click',function(e){ e.stopPropagation(); var was=sp.classList.contains('open'); spots.forEach(function(s){ s.classList.remove('open'); }); if(!was) sp.classList.add('open'); });
+  });
+  document.addEventListener('click',function(){ spots.forEach(function(s){ s.classList.remove('open'); }); });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Lookbook Hotspots",
+  "tag": "section",
+  "max_blocks": 12,
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "SHOP THE SETUP" },
+    { "type": "text", "id": "title", "label": "Title", "default": "The full rig" },
+    { "type": "image_picker", "id": "image", "label": "Lifestyle image" },
+    { "type": "range", "id": "max_w", "label": "Max width (px)", "min": 600, "max": 1600, "step": 20, "default": 1100 },
+    { "type": "range", "id": "pad", "label": "Padding (px)", "min": 40, "max": 200, "step": 10, "default": 72 }
+  ],
+  "blocks": [
+    { "type": "hotspot", "name": "Hotspot", "settings": [
+      { "type": "range", "id": "x", "label": "X position (%)", "min": 0, "max": 100, "step": 1, "default": 50 },
+      { "type": "range", "id": "y", "label": "Y position (%)", "min": 0, "max": 100, "step": 1, "default": 50 },
+      { "type": "image_picker", "id": "thumb", "label": "Product thumbnail" },
+      { "type": "text", "id": "name", "label": "Product name", "default": "Product name" },
+      { "type": "text", "id": "price", "label": "Price", "default": "$99" },
+      { "type": "text", "id": "btn_label", "label": "Button label", "default": "VIEW" },
+      { "type": "url", "id": "link", "label": "Product link" }
+    ]}
+  ],
+  "presets": [{
+    "name": "Lookbook Hotspots",
+    "blocks": [
+      { "type": "hotspot", "settings": { "x": 30, "y": 40, "name": "Pulse Pro", "price": "$299" } },
+      { "type": "hotspot", "settings": { "x": 60, "y": 65, "name": "Vortex K1", "price": "$159" } },
+      { "type": "hotspot", "settings": { "x": 75, "y": 30, "name": "Nova Lamp", "price": "$129" } }
+    ]
+  }]
+}
+{% endschema %}

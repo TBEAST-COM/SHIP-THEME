@@ -1,0 +1,47 @@
+{%- comment -%} Blog posts grid {%- endcomment -%}
+{%- assign blog = blogs[section.settings.blog] -%}
+<section class="wrap tb-reveal" style="padding-block:64px;">
+  <div class="tb-section-head">
+    <div>
+      {%- if section.settings.kicker != blank -%}<div class="tb-kicker">{{ section.settings.kicker }}</div>{%- endif -%}
+      {%- if section.settings.heading != blank -%}<h2 class="tb-section-title">{{ section.settings.heading }}</h2>{%- endif -%}
+    </div>
+    {%- if blog != blank -%}<a class="tb-btn tb-btn--ghost" style="height:auto;padding:11px 18px;" href="{{ blog.url }}">{{ section.settings.button_text }}</a>{%- endif -%}
+  </div>
+  <div class="tb-posts">
+    {%- if blog != blank and blog.articles_count > 0 -%}
+      {%- for article in blog.articles limit: section.settings.count -%}
+        <a class="tb-post" href="{{ article.url }}">
+          <div class="tb-post__media">
+            {%- if article.image -%}<img src="{{ article.image | image_url: width: 600 }}" alt="{{ article.title | escape }}" loading="lazy">
+            {%- else -%}<span class="tb-visual"><span class="tb-visual__orb"></span></span>{%- endif -%}
+          </div>
+          <div class="tb-post__body">
+            <div class="tb-post__meta">{{ article.published_at | date: '%b %d, %Y' }}{% if article.tags.size > 0 %} · {{ article.tags.first }}{% endif %}</div>
+            <div class="tb-post__title">{{ article.title }}</div>
+            <div class="tb-post__excerpt">{{ article.excerpt_or_content | strip_html | truncatewords: 18 }}</div>
+          </div>
+        </a>
+      {%- endfor -%}
+    {%- else -%}
+      {%- for i in (1..3) -%}
+        <div class="tb-post"><div class="tb-post__media"><span class="tb-visual"><span class="tb-visual__orb"></span></span></div>
+          <div class="tb-post__body"><div class="tb-post__meta">Jan 01, 2026</div><div class="tb-post__title">Your latest article title</div><div class="tb-post__excerpt">Connect a blog in the theme editor to show your newest posts here.</div></div></div>
+      {%- endfor -%}
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Blog posts",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "JOURNAL" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "From the blog" },
+    { "type": "blog", "id": "blog", "label": "Blog" },
+    { "type": "range", "id": "count", "min": 2, "max": 6, "step": 1, "label": "Posts", "default": 3 },
+    { "type": "text", "id": "button_text", "label": "Button text", "default": "Read all" }
+  ],
+  "presets": [ { "name": "Blog posts" } ]
+}
+{% endschema %}

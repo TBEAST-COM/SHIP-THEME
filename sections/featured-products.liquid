@@ -1,0 +1,63 @@
+<section class="wrap" style="padding-block:54px 20px;">
+  <div class="tb-section-head">
+    <div>
+      {%- if section.settings.kicker != blank -%}<div class="tb-kicker">{{ section.settings.kicker }}</div>{%- endif -%}
+      {%- if section.settings.heading != blank -%}<h2 class="tb-section-title">{{ section.settings.heading }}</h2>{%- endif -%}
+    </div>
+    {%- if section.settings.button_text != blank -%}
+      <a class="tb-btn tb-btn--ghost" style="height:auto;padding:11px 18px;" href="{{ section.settings.button_link | default: routes.all_products_collection_url }}">{{ section.settings.button_text }}</a>
+    {%- endif -%}
+  </div>
+
+  {%- if section.blocks.size > 0 -%}
+    <div class="tb-grid">
+      {%- for block in section.blocks -%}
+        {%- assign p = block.settings.product -%}
+        {%- if p != blank -%}
+          <div {{ block.shopify_attributes }}>{%- render 'product-card', card_product: p -%}</div>
+        {%- else -%}
+          <div class="tb-card" {{ block.shopify_attributes }}>
+            <div class="tb-card__media"><span class="tb-visual tb-card__visual"><span class="tb-visual__orb"></span></span></div>
+            <div class="tb-card__body">
+              <div class="tb-card__sub">Product</div>
+              <div class="tb-card__row"><span class="tb-card__name">Pick a product</span></div>
+              <div class="tb-price"><span class="tb-price__now">{{ 1990 | money }}</span></div>
+            </div>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  {%- else -%}
+    <div class="tb-search__empty" style="border:1px solid var(--line);border-radius:18px;">Add product blocks in the theme editor.</div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Featured products",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "HANDPICKED" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Featured products" },
+    { "type": "text", "id": "button_text", "label": "Button text" },
+    { "type": "url", "id": "button_link", "label": "Button link" }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Product",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Product" }
+      ]
+    }
+  ],
+  "max_blocks": 24,
+  "presets": [
+    {
+      "name": "Featured products",
+      "blocks": [
+        { "type": "product" }, { "type": "product" }, { "type": "product" }, { "type": "product" }
+      ]
+    }
+  ]
+}
+{% endschema %}

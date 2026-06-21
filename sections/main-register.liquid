@@ -1,0 +1,28 @@
+<section class="wrap tb-page" style="max-width:440px;">
+  <h1 class="tb-page__title" style="text-align:center;font-size:32px;">{{ 'customer.register.title' | t }}</h1>
+  {%- form 'create_customer' -%}
+    {%- if form.errors -%}<p style="color:var(--sale);margin-bottom:14px;">{{ form.errors | default_errors }}</p>{%- endif -%}
+    <div style="display:flex;gap:12px;">
+      <div style="flex:1;">
+        <label class="tb-card__sub">{{ 'customer.register.first_name' | t }}</label>
+        <input class="tb-input" style="width:100%;margin-top:6px;" type="text" name="customer[first_name]" autocomplete="given-name">
+      </div>
+      <div style="flex:1;">
+        <label class="tb-card__sub">{{ 'customer.register.last_name' | t }}</label>
+        <input class="tb-input" style="width:100%;margin-top:6px;" type="text" name="customer[last_name]" autocomplete="family-name">
+      </div>
+    </div>
+    <label class="tb-card__sub" style="display:block;margin-top:16px;">{{ 'customer.login.email' | t }}</label>
+    <input class="tb-input" style="width:100%;margin-top:6px;" type="email" name="customer[email]" autocomplete="email" required>
+    <label class="tb-card__sub" style="display:block;margin-top:16px;">{{ 'customer.login.password' | t }}</label>
+    <input class="tb-input" style="width:100%;margin-top:6px;" type="password" name="customer[password]" autocomplete="new-password">
+    <button type="submit" class="tb-btn tb-btn--primary tb-btn--block" style="margin-top:22px;">{{ 'customer.register.submit' | t }}</button>
+  {%- endform -%}
+  <p style="text-align:center;margin-top:18px;color:var(--muted);font-size:14px;">
+    <a href="{{ routes.account_login_url }}" style="color:var(--accent-2);">{{ 'customer.login.title' | t }}</a>
+  </p>
+</section>
+
+{% schema %}
+{ "name": "Register", "settings": [] }
+{% endschema %}

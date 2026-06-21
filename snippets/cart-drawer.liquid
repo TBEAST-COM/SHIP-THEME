@@ -1,0 +1,84 @@
+{%- comment -%} Slide-out cart drawer. JS (theme.js) keeps it in sync via /cart.js {%- endcomment -%}
+{%- assign threshold_cents = settings.free_shipping_threshold | times: 100 -%}
+{%- capture cart_strings -%}{
+  "empty": {{ 'general.cart.empty' | t | json }},
+  "start": {{ 'general.cart.start' | t | json }},
+  "subtotal": {{ 'general.cart.subtotal' | t | json }},
+  "total": {{ 'general.cart.total' | t | json }},
+  "checkout": {{ 'general.cart.checkout' | t | json }},
+  "secure": {{ 'general.cart.secure' | t | json }},
+  "add": {{ 'general.cart.ship_progress' | t: amount: '__AMT__' | json }},
+  "unlocked": {{ 'general.cart.ship_unlocked' | t | json }},
+  "discount_ph": {{ 'general.cart.discount_placeholder' | t | json }},
+  "discount_apply": {{ 'general.cart.discount_apply' | t | json }},
+  "discount_applied": {{ 'general.cart.discount_applied' | t | json }}
+}{%- endcapture -%}
+
+<div id="tb-cart-drawer" class="tb-overlay">
+  <div class="tb-overlay__scrim" data-cart-close></div>
+  <aside class="tb-drawer" role="dialog" aria-modal="true" aria-label="{{ 'general.cart.title' | t }}">
+    <div class="tb-drawer__head">
+      <div class="tb-drawer__title">{{ 'general.cart.title' | t }} <span>{{ 'general.cart.items_count' | t: count: cart.item_count }}</span></div>
+      <button class="tb-icon-btn" data-cart-close aria-label="{{ 'general.accessibility.close' | t }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <div id="tb-cart-body" class="tb-drawer__body" data-free-threshold="{{ threshold_cents }}" data-strings="{{ cart_strings | strip_newlines | escape }}">
+      {%- if cart.item_count == 0 -%}
+        <div class="tb-empty">
+          <div class="tb-empty__icon">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 2 3 6v13a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          </div>
+          <div style="font-size:15.5px;color:var(--muted)">{{ 'general.cart.empty' | t }}</div>
+          <button class="tb-btn tb-btn--ghost" style="margin-top:20px" data-cart-close>{{ 'general.cart.start' | t }}</button>
+        </div>
+      {%- else -%}
+        {%- for item in cart.items -%}
+          <div class="tb-cart-line" data-key="{{ item.key }}">
+            <span class="tb-cart-line__media">
+              {%- if item.image -%}<img src="{{ item.image | image_url: width: 132 }}" alt="{{ item.title | escape }}">
+              {%- else -%}<span class="tb-visual"><span class="tb-visual__orb"></span></span>{%- endif -%}
+            </span>
+            <div style="flex:1;min-width:0">
+              <div class="tb-cart-line__top">
+                <span class="tb-cart-line__name">{{ item.product.title }}</span>
+                <button class="tb-remove" data-qty="0" data-key="{{ item.key }}">&#10005;</button>
+              </div>
+              {%- unless item.variant.title contains 'Default' -%}<div class="tb-cart-line__variant">{{ item.variant.title }}</div>{%- endunless -%}
+              <div class="tb-cart-line__bottom">
+                <div class="tb-mini-step">
+                  <button data-qty="{{ item.quantity | minus: 1 }}" data-key="{{ item.key }}">&minus;</button>
+                  <span>{{ item.quantity }}</span>
+                  <button data-qty="{{ item.quantity | plus: 1 }}" data-key="{{ item.key }}">+</button>
+                </div>
+                <span style="font-family:var(--display);font-weight:600">{{ item.final_line_price | money }}</span>
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+
+    <div id="tb-cart-foot" class="tb-drawer__foot">
+      {%- if cart.item_count > 0 -%}
+        {%- if threshold_cents > 0 -%}
+          {%- assign remain = threshold_cents | minus: cart.total_price -%}
+          {%- assign pct = cart.total_price | times: 100.0 | divided_by: threshold_cents -%}
+          {%- if pct > 100 -%}{%- assign pct = 100 -%}{%- endif -%}
+          <div class="tb-ship-bar"><div class="tb-ship-bar__fill" style="width:{{ pct }}%"></div></div>
+          <div class="tb-ship-msg">{%- if remain > 0 -%}{{ 'general.cart.ship_progress' | t: amount: remain | money }}{%- else -%}{{ 'general.cart.ship_unlocked' | t }}{%- endif -%}</div>
+        {%- endif -%}
+        <form class="tb-discount" id="tb-discount-form" data-checkout="{{ routes.cart_url }}/checkout" data-applied="{{ 'general.cart.discount_applied' | t }}">
+          <input type="text" name="discount" class="tb-discount__input" placeholder="{{ 'general.cart.discount_placeholder' | t }}" autocomplete="off" aria-label="{{ 'general.cart.discount_placeholder' | t }}">
+          <button type="submit" class="tb-discount__btn">{{ 'general.cart.discount_apply' | t }}</button>
+        </form>
+        <div class="tb-discount__note" id="tb-discount-note" hidden></div>
+        <div class="tb-sum"><span>{{ 'general.cart.subtotal' | t }}</span><b>{{ cart.total_price | money }}</b></div>
+        <div class="tb-sum tb-sum--total"><span class="lbl">{{ 'general.cart.total' | t }}</span><span class="val">{{ cart.total_price | money }}</span></div>
+        <a href="{{ routes.cart_url }}/checkout" id="tb-checkout-btn" class="tb-btn tb-btn--primary tb-btn--block">{{ 'general.cart.checkout' | t }}</a>
+        <div class="tb-secure">{{ 'general.cart.secure' | t }}</div>
+      {%- endif -%}
+    </div>
+  </aside>
+</div>

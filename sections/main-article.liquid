@@ -1,0 +1,14 @@
+<article class="wrap tb-page" style="max-width:820px;">
+  <nav class="tb-crumb"><a href="{{ blog.url }}">{{ blog.title }}</a> / <b>{{ article.title }}</b></nav>
+  <h1 class="tb-page__title" style="margin-bottom:10px;">{{ article.title }}</h1>
+  <div class="tb-card__sub" style="margin-bottom:24px;">{{ article.published_at | date: '%B %d, %Y' }}{% if article.author != blank %} · {{ 'blogs.article.by' | t: author: article.author }}{% endif %}</div>
+  {%- if article.image -%}
+    <img src="{{ article.image | image_url: width: 1200 }}" alt="{{ article.image.alt | escape }}" style="width:100%;border-radius:20px;border:1px solid var(--line);margin-bottom:30px;">
+  {%- endif -%}
+  <div class="rte" style="max-width:none;">{{ article.content }}</div>
+  <div style="margin-top:40px;"><a class="tb-btn tb-btn--ghost" href="{{ blog.url }}">{{ 'blogs.article.back' | t }}</a></div>
+</article>
+
+{% schema %}
+{ "name": "Article", "settings": [] }
+{% endschema %}

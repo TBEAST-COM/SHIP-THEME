@@ -1,0 +1,54 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "blocks": {
+        "s1": { "type": "stat", "settings": { "number": "120K+", "label": "Happy customers" } },
+        "s2": { "type": "stat", "settings": { "number": "4.8★", "label": "Average rating" } },
+        "s3": { "type": "stat", "settings": { "number": "42h", "label": "Battery life" } }
+      },
+      "block_order": ["s1", "s2", "s3"],
+      "settings": {
+        "kicker": "NEXT-GEN HARDWARE",
+        "heading": "Sound engineered\nbeyond limits",
+        "subheading": "Precision-built audio and tech with warm materials and performance that never compromises.",
+        "button_text": "Shop now",
+        "button_2_text": "Explore",
+        "chip_1": "ANC · 42h",
+        "chip_2": "Hi-Res Audio"
+      }
+    },
+    "marquee": { "type": "marquee", "settings": {} },
+    "collection-list": {
+      "type": "collection-list",
+      "blocks": {
+        "c1": { "type": "item", "settings": {} },
+        "c2": { "type": "item", "settings": {} },
+        "c3": { "type": "item", "settings": {} },
+        "c4": { "type": "item", "settings": {} }
+      },
+      "block_order": ["c1", "c2", "c3", "c4"],
+      "settings": { "kicker": "BROWSE BY CATEGORY", "heading": "Explore the collections" }
+    },
+    "featured": {
+      "type": "featured-collection",
+      "settings": { "kicker": "BEST SELLERS", "heading": "Chosen by the pros", "products_to_show": 8, "show_view_all": true }
+    },
+    "feature-band": {
+      "type": "feature-band",
+      "blocks": {
+        "f1": { "type": "feature", "settings": { "icon": "⟁", "title": "Fast shipping", "text": "Delivered within 48h to most cities." } },
+        "f2": { "type": "feature", "settings": { "icon": "↺", "title": "30-day returns", "text": "Try it, send it back free if it’s not for you." } },
+        "f3": { "type": "feature", "settings": { "icon": "✦", "title": "2-year warranty", "text": "Full coverage across every device." } },
+        "f4": { "type": "feature", "settings": { "icon": "⌘", "title": "Human support", "text": "A real team, available around the clock." } }
+      },
+      "block_order": ["f1", "f2", "f3", "f4"],
+      "settings": {}
+    },
+    "cta": {
+      "type": "cta-banner",
+      "settings": { "kicker": "JOIN THE PACK", "heading": "Subscribe for free shipping and 10% off your first order", "show_form": true, "button_text": "Subscribe" }
+    }
+  },
+  "order": ["hero", "marquee", "collection-list", "featured", "feature-band", "cta"]
+}

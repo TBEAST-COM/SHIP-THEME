@@ -1,0 +1,15 @@
+{%- comment -%} Price block. Params: product (or variant via target) {%- endcomment -%}
+{%- liquid
+  assign target = product
+  if variant
+    assign target = variant
+  endif
+  assign price = target.price
+  assign compare = target.compare_at_price
+-%}
+<div class="tb-price">
+  <span class="tb-price__now" data-price-now>{{ price | money }}</span>
+  {%- if compare > price -%}
+    <span class="tb-price__was">{{ compare | money }}</span>
+  {%- endif -%}
+</div>

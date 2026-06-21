@@ -1,0 +1,16 @@
+<section class="wrap tb-page">
+  <h1 class="tb-page__title">{{ 'collections.general.all_products' | t | default: 'Collections' }}</h1>
+  <div class="tb-cat-grid">
+    {%- for collection in collections -%}
+      <a class="tb-cat" href="{{ collection.url }}">
+        <span class="tb-cat__count">{{ collection.products_count }}</span>
+        <span class="tb-cat__name">{{ collection.title }}</span>
+        <span class="tb-cat__link">{{ 'collections.general.explore' | t }} <span class="mono">{% if request.locale.iso_code == 'ar' %}&larr;{% else %}&rarr;{% endif %}</span></span>
+      </a>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{ "name": "List collections", "settings": [] }
+{% endschema %}
