@@ -19,7 +19,8 @@
         "logo_QHqNmq": {
           "type": "logo",
           "settings": {
-            "scale": 100,
+            "image": "shopify://shop_images/TBEAST.png",
+            "scale": 160,
             "link": ""
           }
         },
