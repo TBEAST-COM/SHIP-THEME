@@ -32,7 +32,7 @@
             {%- endcase -%}
           {%- endfor -%}
         {%- else -%}
-          {%- assign words = 'VOGUE, L''ORÉAL, COSMOPOLITAN, FOX, FORBES, WIRED' | split: ',' -%}
+          {%- assign words = 'VOGUE, FORBES, COSMOPOLITAN, FOX, WIRED, TECHCRUNCH' | split: ',' -%}
           {%- for w in words -%}
             <span class="tb-mq__sep" aria-hidden="true">&#10022;</span>
             <span class="tb-mq__item tb-mq__item--text">{{ w | strip }}</span>
