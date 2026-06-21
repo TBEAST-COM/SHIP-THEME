@@ -1,7 +1,16 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "current": {
-    "brand_tagline": "SOUND · POWER · FUTURE",
     "logo_width": 120,
+    "brand_tagline": "SOUND · POWER · FUTURE",
     "background_color": "#221b14",
     "accent_color": "#c86a3f",
     "accent_2_color": "#d9a23f",
@@ -11,6 +20,63 @@
     "free_shipping_threshold": 200,
     "card_hover_reveal": true,
     "card_quick_add": true,
-    "card_show_vendor": true
+    "card_show_vendor": true,
+    "spin_enabled": true,
+    "sections": {
+      "announcement-bar": {
+        "type": "announcement-bar",
+        "settings": {
+          "icon": "◆",
+          "text": "Free shipping on orders over $200 — 2-year warranty on every device",
+          "link_text": "Shop now",
+          "link": ""
+        }
+      },
+      "header": {
+        "type": "header",
+        "settings": {
+          "menu": "main-menu"
+        }
+      },
+      "footer": {
+        "type": "footer",
+        "blocks": {
+          "footer-0": {
+            "type": "menu",
+            "settings": {
+              "heading": "Shop",
+              "menu": ""
+            }
+          },
+          "footer-1": {
+            "type": "menu",
+            "settings": {
+              "heading": "Company",
+              "menu": ""
+            }
+          },
+          "footer-2": {
+            "type": "menu",
+            "settings": {
+              "heading": "Support",
+              "menu": ""
+            }
+          }
+        },
+        "block_order": [
+          "footer-0",
+          "footer-1",
+          "footer-2"
+        ],
+        "settings": {
+          "footer_text": "",
+          "copyright": "All rights reserved",
+          "enable_wave": true,
+          "wave_color": "#c86a3f",
+          "wave_color_2": "#7a3b22"
+        }
+      }
+    },
+    "content_for_index": []
   }
 }
