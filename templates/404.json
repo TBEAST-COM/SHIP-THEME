@@ -64,9 +64,9 @@
       "settings": {
         "band_color": "#caa9d8",
         "monochrome": true,
-        "row_height": 96,
-        "logo_height": 38,
-        "speed": 32,
+        "row_height": 128,
+        "logo_height": 80,
+        "speed": 66,
         "top_gap": 0,
         "wave_top": false,
         "wave_bottom": true
