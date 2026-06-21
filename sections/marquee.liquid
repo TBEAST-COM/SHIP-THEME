@@ -1,53 +1,61 @@
-{%- assign band = section.settings.band_color | default: '#caa9d8' -%}
+{%- assign band = section.settings.band_color | default: '#c86a3f' -%}
+
+{%- comment -%} build the item set once, then repeat it to guarantee no empty gap {%- endcomment -%}
+{%- capture mq_items -%}
+  {%- if section.blocks.size > 0 -%}
+    {%- for block in section.blocks -%}
+      <span class="tb-mq__sep" aria-hidden="true">&#10022;</span>
+      {%- case block.type -%}
+      {%- when 'logo' -%}
+        {%- if block.settings.image != blank -%}
+          {%- if block.settings.link != blank -%}<a href="{{ block.settings.link }}" class="tb-mq__item">{%- else -%}<span class="tb-mq__item">{%- endif -%}
+            <img src="{{ block.settings.image | image_url: width: 320 }}" alt="{{ block.settings.image.alt | default: 'brand' | escape }}" loading="lazy" style="height:{{ block.settings.scale | default: 100 | divided_by: 100.0 | times: section.settings.logo_height | default: 38 }}px;">
+          {%- if block.settings.link != blank -%}</a>{%- else -%}</span>{%- endif -%}
+        {%- else -%}
+          <span class="tb-mq__item tb-mq__item--ph">LOGO</span>
+        {%- endif -%}
+      {%- when 'text' -%}
+        <span class="tb-mq__item tb-mq__item--text">{{ block.settings.text }}</span>
+      {%- endcase -%}
+    {%- endfor -%}
+  {%- else -%}
+    {%- assign words = 'HI-RES AUDIO, ANC, 42H BATTERY, USB-C, LDAC, IP67, FREE SHIPPING, 2-YEAR WARRANTY' | split: ',' -%}
+    {%- for w in words -%}
+      <span class="tb-mq__sep" aria-hidden="true">&#10022;</span>
+      <span class="tb-mq__item tb-mq__item--text">{{ w | strip }}</span>
+    {%- endfor -%}
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- capture mq_half -%}{{ mq_items }}{{ mq_items }}{{ mq_items }}{%- endcapture -%}
+
+{%- comment -%} seamless tiling wave path: 13 periods of 200u (amp 14), extends past viewBox so drift never gaps {%- endcomment -%}
+{%- capture mq_wd -%}M0,22 q50,-14 100,0 q50,14 100,0 q50,-14 100,0 q50,14 100,0 q50,-14 100,0 q50,14 100,0 q50,-14 100,0 q50,14 100,0 q50,-14 100,0 q50,14 100,0 q50,-14 100,0 q50,14 100,0 q50,-14 100,0 q50,14 100,0 q50,-14 100,0 q50,14 100,0 q50,-14 100,0 q50,14 100,0 q50,-14 100,0 q50,14 100,0 q50,-14 100,0 q50,14 100,0 q50,-14 100,0 q50,14 100,0 q50,-14 100,0 q50,14 100,0 L2600,44 L0,44 Z{%- endcapture -%}
+
 <div class="tb-mq{% if section.settings.wave_top %} tb-mq--wtop{% endif %}{% if section.settings.wave_bottom %} tb-mq--wbot{% endif %}"
-  style="margin-top:{{ section.settings.top_gap | default: 0 }}px;--mq-band:{{ band }};--mq-speed:{{ section.settings.speed | default: 32 }}s;--mq-h:{{ section.settings.row_height | default: 96 }}px;--mq-logo-h:{{ section.settings.logo_height | default: 38 }}px;">
+  style="margin-top:{{ section.settings.top_gap | default: 0 }}px;--mq-band:{{ band }};--mq-speed:{{ section.settings.speed | default: 26 }}s;--mq-h:{{ section.settings.row_height | default: 92 }}px;--mq-logo-h:{{ section.settings.logo_height | default: 38 }}px;">
 
   {%- if section.settings.wave_top -%}
   <div class="tb-mq__wave tb-mq__wave--top" aria-hidden="true">
-    <svg viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto" xmlns="http://www.w3.org/2000/svg">
-      <defs><path id="tb-mq-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"/></defs>
-      <g><use href="#tb-mq-wave" x="48" y="0" class="tb-mq__w1"/><use href="#tb-mq-wave" x="48" y="3" class="tb-mq__w2"/><use href="#tb-mq-wave" x="48" y="6" class="tb-mq__w3"/></g>
+    <svg class="tb-mq__wsvg" viewBox="0 0 2400 44" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path class="tb-mq__wfill" fill="currentColor" d="{{ mq_wd }}"></path>
+      <path class="tb-mq__wfoam" fill="currentColor" transform="translate(0,-5)" d="{{ mq_wd }}"></path>
     </svg>
   </div>
   {%- endif -%}
 
   <div class="tb-mq__band">
     <div class="tb-mq__track{% if section.settings.monochrome %} tb-mq--mono{% endif %}">
-      {%- for pass in (1..2) -%}
-      <div class="tb-mq__seq"{% if pass == 2 %} aria-hidden="true"{% endif %}>
-        {%- if section.blocks.size > 0 -%}
-          {%- for block in section.blocks -%}
-            <span class="tb-mq__sep" aria-hidden="true">&#10022;</span>
-            {%- case block.type -%}
-            {%- when 'logo' -%}
-              {%- if block.settings.image != blank -%}
-                {%- if block.settings.link != blank -%}<a href="{{ block.settings.link }}" class="tb-mq__item" {{ block.shopify_attributes }}>{%- else -%}<span class="tb-mq__item" {{ block.shopify_attributes }}>{%- endif -%}
-                  <img src="{{ block.settings.image | image_url: width: 320 }}" alt="{{ block.settings.image.alt | default: 'brand' | escape }}" loading="lazy" style="height:{{ block.settings.scale | default: 100 | divided_by: 100.0 | times: section.settings.logo_height | default: 38 }}px;">
-                {%- if block.settings.link != blank -%}</a>{%- else -%}</span>{%- endif -%}
-              {%- else -%}
-                <span class="tb-mq__item tb-mq__item--ph" {{ block.shopify_attributes }}>LOGO</span>
-              {%- endif -%}
-            {%- when 'text' -%}
-              <span class="tb-mq__item tb-mq__item--text" {{ block.shopify_attributes }}>{{ block.settings.text }}</span>
-            {%- endcase -%}
-          {%- endfor -%}
-        {%- else -%}
-          {%- assign words = 'VOGUE, FORBES, COSMOPOLITAN, FOX, WIRED, TECHCRUNCH' | split: ',' -%}
-          {%- for w in words -%}
-            <span class="tb-mq__sep" aria-hidden="true">&#10022;</span>
-            <span class="tb-mq__item tb-mq__item--text">{{ w | strip }}</span>
-          {%- endfor -%}
-        {%- endif -%}
-      </div>
-      {%- endfor -%}
+      <div class="tb-mq__seq">{{ mq_half }}</div>
+      <div class="tb-mq__seq" aria-hidden="true">{{ mq_half }}</div>
     </div>
   </div>
 
   {%- if section.settings.wave_bottom -%}
   <div class="tb-mq__wave tb-mq__wave--bot" aria-hidden="true">
-    <svg viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto" xmlns="http://www.w3.org/2000/svg">
-      <defs><path id="tb-mq-waveb" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"/></defs>
-      <g><use href="#tb-mq-waveb" x="48" y="0" class="tb-mq__w1"/><use href="#tb-mq-waveb" x="48" y="3" class="tb-mq__w2"/><use href="#tb-mq-waveb" x="48" y="6" class="tb-mq__w3"/></g>
+    <svg class="tb-mq__wsvg" viewBox="0 0 2400 44" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path class="tb-mq__wfill" fill="currentColor" d="{{ mq_wd }}"></path>
+      <path class="tb-mq__wfoam" fill="currentColor" transform="translate(0,-5)" d="{{ mq_wd }}"></path>
     </svg>
   </div>
   {%- endif -%}
@@ -58,11 +66,11 @@
   "name": "Marquee",
   "settings": [
     { "type": "header", "content": "Band" },
-    { "type": "color", "id": "band_color", "label": "Band color", "default": "#caa9d8" },
+    { "type": "color", "id": "band_color", "label": "Band color", "default": "#c86a3f" },
     { "type": "checkbox", "id": "monochrome", "label": "Make logos white", "default": true },
-    { "type": "range", "id": "row_height", "min": 48, "max": 160, "step": 4, "unit": "px", "label": "Band height", "default": 96 },
+    { "type": "range", "id": "row_height", "min": 48, "max": 160, "step": 4, "unit": "px", "label": "Band height", "default": 92 },
     { "type": "range", "id": "logo_height", "min": 16, "max": 80, "step": 2, "unit": "px", "label": "Logo height", "default": 38 },
-    { "type": "range", "id": "speed", "min": 10, "max": 80, "step": 2, "unit": "s", "label": "Scroll duration", "default": 32 },
+    { "type": "range", "id": "speed", "min": 10, "max": 80, "step": 2, "unit": "s", "label": "Scroll duration", "default": 26 },
     { "type": "range", "id": "top_gap", "min": 0, "max": 80, "step": 2, "unit": "px", "label": "Top gap", "default": 0 },
     { "type": "header", "content": "Wave edges" },
     { "type": "checkbox", "id": "wave_top", "label": "Wave on top edge", "default": false },
