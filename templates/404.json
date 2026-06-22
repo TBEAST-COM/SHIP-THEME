@@ -126,12 +126,26 @@
         "button_text": "",
         "button_link": ""
       }
+    },
+    "wave_divider_HzgVkH": {
+      "type": "wave-divider",
+      "name": "Wave divider",
+      "settings": {
+        "band_color": "#c86a3f",
+        "foam_color": "#ffffff",
+        "height": 120,
+        "speed": 20,
+        "flip": false,
+        "gap_top": 0,
+        "gap_bottom": 0
+      }
     }
   },
   "order": [
     "main",
     "marquee_feQJzN",
     "wave_divider_PbpejF",
-    "featured_products_prHGMM"
+    "featured_products_prHGMM",
+    "wave_divider_HzgVkH"
   ]
 }
