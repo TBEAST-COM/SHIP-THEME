@@ -66,17 +66,32 @@
         <script type="application/json" data-variant-json>[{% for v in product.variants %}{"id":{{ v.id }},"options":{{ v.options | json }},"price":{{ v.price }},"available":{{ v.available }}}{% unless forloop.last %},{% endunless %}{% endfor %}]</script>
 
         {%- unless product.has_only_default_variant -%}
+          {%- assign color_names = 'color,colour,اللون,لون' | split: ',' -%}
           {%- for option in product.options_with_values -%}
+            {%- assign opt_down = option.name | downcase -%}
+            {%- assign is_color = false -%}
+            {%- if color_names contains opt_down -%}{%- assign is_color = true -%}{%- endif -%}
             <div class="tb-opt">
               <div class="tb-opt__head"><span>{{ option.name }}</span><b data-variant-label>{{ option.selected_value }}</b></div>
-              <div class="tb-pills" role="radiogroup" aria-label="{{ option.name }}">
-                {%- for value in option.values -%}
-                  <label class="tb-vpill {% if option.selected_value == value %}is-active{% endif %}">
-                    <input type="radio" name="option{{ option.position }}" value="{{ value | escape }}" data-option {% if option.selected_value == value %}checked{% endif %}>
-                    {{ value }}
-                  </label>
-                {%- endfor -%}
-              </div>
+              {%- if is_color -%}
+                <div class="tb-swatches" role="radiogroup" aria-label="{{ option.name }}">
+                  {%- for value in option.values -%}
+                    {%- if value.swatch.color -%}{%- assign sw = value.swatch.color -%}{%- else -%}{%- assign sw = value | downcase -%}{%- endif -%}
+                    <label class="tb-swatch {% if option.selected_value == value %}is-active{% endif %}" title="{{ value | escape }}" style="background:{{ sw }};{% if value.swatch.image %}background-image:url({{ value.swatch.image | image_url: width: 100 }});background-size:cover;{% endif %}">
+                      <input type="radio" name="option{{ option.position }}" value="{{ value | escape }}" data-option {% if option.selected_value == value %}checked{% endif %}>
+                    </label>
+                  {%- endfor -%}
+                </div>
+              {%- else -%}
+                <div class="tb-pills" role="radiogroup" aria-label="{{ option.name }}">
+                  {%- for value in option.values -%}
+                    <label class="tb-vpill {% if option.selected_value == value %}is-active{% endif %}">
+                      <input type="radio" name="option{{ option.position }}" value="{{ value | escape }}" data-option {% if option.selected_value == value %}checked{% endif %}>
+                      {{ value }}
+                    </label>
+                  {%- endfor -%}
+                </div>
+              {%- endif -%}
             </div>
           {%- endfor -%}
         {%- endunless -%}
